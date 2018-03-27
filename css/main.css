@@ -1823,7 +1823,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #9c37b8;
+  background: #b9593c;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3009,11 +3009,8 @@ pre {
 }
 .tag-cloud {
   margin: -80px 50px 40px 50px;
-  background-color: #fafad2;
+  background-color: #fff;
   padding: 86px 36px 36px 36px;
-}
-.tag-cloud-title {
-  margin-bottom: 15px;
 }
 @media (max-width: 767px) {
   .tag-cloud {
