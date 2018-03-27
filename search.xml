@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[test_my_site]]></title>
     <url>%2F2018%2F03%2F26%2Ftest-my-site%2F</url>
-    <content type="text"><![CDATA[This doc created to test_my_site helo ya handsome guy 1234if a &gt; b : print &apos;a&apos;else: print &apos;b&apos;]]></content>
+    <content type="text"><![CDATA[This doc created to test_my_site helo ya handsome guy 1234if a &gt; b : print 'a'else: print 'b']]></content>
       <tags>
         <tag>Testing</tag>
         <tag>Tag</tag>
