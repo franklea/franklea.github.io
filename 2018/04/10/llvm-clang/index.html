@@ -133,7 +133,7 @@
 <meta property="og:site_name" content="Franklea&#39;s Base">
 <meta property="og:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看，不求深挖，但求基础全面。本文主要是用于整理记录笔记，摘录一些我认为比较重要和有用的信息，作为日后参考。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-10T01:08:17.902Z">
+<meta property="og:updated_time" content="2018-04-10T09:55:14.668Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LLVM编译器框架浅析">
 <meta name="twitter:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看，不求深挖，但求基础全面。本文主要是用于整理记录笔记，摘录一些我认为比较重要和有用的信息，作为日后参考。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机">
@@ -432,8 +432,56 @@
 </ul>
 <p>总之，LLVM是一套很强大的编译系统。</p>
 <p>此外，LLVM提供了许多工业级的工具和库，包含了许多子项目，其中最有名的当属Clang。LLVM在工业界也得到了广泛的使用，包括Adobe, Apple, Intel, NVIDIA……等等等等。</p>
-<p>总结一下，LLVM具有使用简单（相对来说）， 快速，模块化等诸多有点，it is cool!</p>
-<h2 id="2-LLVM-编译系统"><a href="#2-LLVM-编译系统" class="headerlink" title="2, LLVM 编译系统"></a>2, LLVM 编译系统</h2>
+<p>总结一下，LLVM具有使用简单（相对而言）， 快速，模块化等诸多有点，it is cool!</p>
+<h2 id="2-LLVM-编译系统"><a href="#2-LLVM-编译系统" class="headerlink" title="2, LLVM 编译系统"></a>2, LLVM 编译系统</h2><p>LLVM编译系统可分为编译器基础组件和编译器框架两部分。</p>
+<p>LLVM编译器基础组件为构建编译器提供了可重用的组件，使得构建一个新的编译器的时间开销更小，也为LLVM编译器提供了更多的功能和更好的扩展性。<br>LLVM编译器框架提供了一种编译器框架，通过框架将LLVM编译系统中的基础组件进行组合连接，进而形成具备特定属性、满足特定需求的编译器。框架包含前端、中端和后端三个部分。简单地说，前端将目标语言翻译成LLVM中间语言（LLVM IR），中端基于LLVM IR对程序进行优化分析等，后端将LLVM IR翻译成目标架构的机器指令。整理LLVM编译系统的整体内容如下：</p>
+<ul>
+<li>前端：<ul>
+<li>Clang(C/C++/ObjC/OpenCL/OpenMP), flang(Fortran), LDC(D), PGI’s Fortran, etc.</li>
+</ul>
+</li>
+<li>前端插件:<ul>
+<li>Static analyser, clang-tidy, clang-format, clang-complete, etc.</li>
+</ul>
+</li>
+<li>中端:<ul>
+<li>Optimiztion and Analysis passes, integration with Polly, etc.</li>
+</ul>
+</li>
+<li>后端<ul>
+<li>JIT(MC and ORC), targets: ARM, AArch64, MIPS, PPC, x86, GPUs, BPF, WebAsm, etc.</li>
+</ul>
+</li>
+<li>库<ul>
+<li>Compiler-RT, libc++/abi, libunwind, OpenMP, libCL, etc.</li>
+</ul>
+</li>
+<li>工具<ul>
+<li>LLD, LLDB, LNT, readobj, llc, lli, bugpoint, objdump, lto, etc.</li>
+</ul>
+</li>
+</ul>
+<p>下表对LLVM和GNU编译器进行了对比。<br>|            | LLVM                         | GNU                      |<br>| ———- | —————————- | ———————— |<br>| Front-end  | Clang                        | CC1/CPP                  |<br>| Middle-end | LLVM                         | GCC                      |<br>| Back-end   | LLVM                         | GCC                      |<br>| Assembler  | LLVM(MC)                     | GAS                      |<br>| Linker     | LLD                          | GNU-LD                   |<br>| Libraries  | Compiler-RT, libc++(no libc) | libgcc, stdlibc++, glibc |<br>| Debugger   | LLDB/LLDBserver              | GDB/GDBserver            |</p>
+<h3 id="2-1-前端"><a href="#2-1-前端" class="headerlink" title="2.1 前端"></a>2.1 前端</h3><p>和所有编译器前端类似，LLVM编译器前端对目标源代码进行解析，最终生成LLVM IR.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sc=&gt;start: Source Code</span><br><span class="line">ps=&gt;inputoutput: Parser</span><br><span class="line">api=&gt;inputoutput: LLVM API</span><br><span class="line">ir=&gt;end: LLVM IR</span><br><span class="line"></span><br><span class="line">sc(right)-&gt;ps(right)-&gt;api(right)-&gt;ir</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>LLVM API:<ul>
+<li>Module</li>
+<li>IRBuilder</li>
+<li>Function</li>
+<li>BasicBlock</li>
+<li>Instruction</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-中端"><a href="#2-2-中端" class="headerlink" title="2.2 中端"></a>2.2 中端</h3><p>中端接着前端的工作，在IR的基础上对程序进行转换和优化，如下图。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">Sc[Source Code] --&gt;Fr(Frountend)</span><br><span class="line">Fr --&gt; IR(IR)</span><br><span class="line">IR --&gt; Pass(Pass)</span><br><span class="line">Pass --&gt; Dot(...)</span><br><span class="line">Dot --&gt; P2(Pass)</span><br><span class="line">P2 --&gt; IR2(IR)</span><br><span class="line">IR2 --&gt; Bk(Backend)</span><br><span class="line">Bk --&gt; As(Assembly)</span><br></pre></td></tr></table></figure></p>
+<p>要理解中端的优化过程，理解Pass非常重要。<br>如LLVM官网所述：</p>
+<blockquote>
+<p>The LLVM Pass Framework is an important part of the LLVM system, because LLVM passes are where most of the interesting parts of the compiler exist. Passes perform the transformations and optimizations that make up the compiler, they build the analysis results that are used by these transformations, and they are, above all, a structuring technique for compiler code.</p>
+</blockquote>
+<p>LLVM编译系统中对程序的优化分为多个步骤——也可说多个Pass——进行。每个Pass中对IR进行变换和优化，多个Pass组合完成编译器进行的所有优化行为。如上图所示，多个Pass阶段共同完成了中端的分析和优化。</p>
+<h3 id="2-3-后端"><a href="#2-3-后端" class="headerlink" title="2.3 后端"></a>2.3 后端</h3><p>后端将中端转换和优化后的IR翻译成</p>
+<p>(未完待续。。。)</p>
+
       
     </div>
     
@@ -639,7 +687,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-什么是LLVM"><span class="nav-number">1.</span> <span class="nav-text">1, 什么是LLVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LLVM-编译系统"><span class="nav-number">2.</span> <span class="nav-text">2, LLVM 编译系统</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-什么是LLVM"><span class="nav-number">1.</span> <span class="nav-text">1, 什么是LLVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LLVM-编译系统"><span class="nav-number">2.</span> <span class="nav-text">2, LLVM 编译系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-前端"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 前端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-中端"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 中端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-后端"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 后端</span></a></li></ol></li></ol></div>
             
 
           </div>
