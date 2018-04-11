@@ -133,12 +133,14 @@
 <meta property="og:site_name" content="Franklea&#39;s Base">
 <meta property="og:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机，光从字面上来说看，仍然是一脸">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/franklea/Pic/master/201804/llvm-front-end.svg">
-<meta property="og:updated_time" content="2018-04-11T08:21:24.114Z">
+<meta property="og:image" content="http://franklea.github.io/images/llvm-front-end.svg">
+<meta property="og:image" content="http://franklea.github.io/images/llvm-midend.svg">
+<meta property="og:image" content="http://franklea.github.io/images/llvm-backend.svg">
+<meta property="og:updated_time" content="2018-04-11T08:52:08.485Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LLVM编译器框架浅析">
 <meta name="twitter:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机，光从字面上来说看，仍然是一脸">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/franklea/Pic/master/201804/llvm-front-end.svg">
+<meta name="twitter:image" content="http://franklea.github.io/images/llvm-front-end.svg">
 
 
 
@@ -530,15 +532,17 @@
 </li>
 </ul>
 <h3 id="2-2-前端"><a href="#2-2-前端" class="headerlink" title="2.2 前端"></a>2.2 前端</h3><p>和所有编译器前端类似，LLVM编译器前端对目标源代码进行解析，最终生成LLVM IR.</p>
-<p><img src="https://raw.githubusercontent.com/franklea/Pic/master/201804/llvm-front-end.svg" alt="image"></p>
-<h3 id="2-3-中端"><a href="#2-3-中端" class="headerlink" title="2.3 中端"></a>2.3 中端</h3><p>中端接着前端的工作，在IR的基础上对程序进行转换和优化，如下图。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">Sc[Source Code] --&gt;Fr(Frountend)</span><br><span class="line">Fr --&gt; IR(IR)</span><br><span class="line">IR --&gt; Pass(Pass)</span><br><span class="line">Pass --&gt; Dot(...)</span><br><span class="line">Dot --&gt; P2(Pass)</span><br><span class="line">P2 --&gt; IR2(IR)</span><br><span class="line">IR2 --&gt; Bk(Backend)</span><br><span class="line">Bk --&gt; As(Assembly)</span><br></pre></td></tr></table></figure></p>
+<p> <img src="/images/llvm-front-end.svg" alt=""></p>
+<h3 id="2-3-中端"><a href="#2-3-中端" class="headerlink" title="2.3 中端"></a>2.3 中端</h3><p>中端接着前端的工作，在IR的基础上对程序进行转换和优化，如下图。</p>
+<p><img src="/images/llvm-midend.svg" alt=""></p>
 <p>要理解中端的优化过程，理解Pass非常重要。<br>如LLVM官网所述：</p>
 <blockquote>
 <p>The LLVM Pass Framework is an important part of the LLVM system, because LLVM passes are where most of the interesting parts of the compiler exist. Passes perform the transformations and optimizations that make up the compiler, they build the analysis results that are used by these transformations, and they are, above all, a structuring technique for compiler code.</p>
 </blockquote>
 <p>关于如何写一个Pass，LLVM官网提供了非常详细的<a href="https://llvm.org/docs/WritingAnLLVMPass.html" target="_blank" rel="noopener">参考文档</a>。</p>
 <p>LLVM编译系统中对程序的优化分为多个步骤——也可说多个Pass——进行。每个Pass中对IR进行变换和优化，多个Pass组合完成编译器进行的所有优化行为。如上图所示，多个Pass阶段共同完成了中端的分析和优化。</p>
-<h3 id="2-4-后端"><a href="#2-4-后端" class="headerlink" title="2.4 后端"></a>2.4 后端</h3><p>后端将中端转换和优化后的IR翻译成目标架构的汇编语言。转换的过程如下图所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ir=&gt;start: LLVM IR</span><br><span class="line">dag=&gt;inputoutput: Selection DAG</span><br><span class="line">ass=&gt;end: Assembly</span><br><span class="line"></span><br><span class="line">ir(right)-&gt;dag(right)-&gt;ass</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-4-后端"><a href="#2-4-后端" class="headerlink" title="2.4 后端"></a>2.4 后端</h3><p>后端将中端转换和优化后的IR翻译成目标架构的汇编语言。转换的过程如下图所示：</p>
+<p><img src="/images/llvm-backend.svg" alt=""></p>
 <ul>
 <li>首先，将LLVM IR表示成一个有向无环图（SelectionDAG），图的节点是类<strong>SDNode</strong>的实例，包含了一条目标指令，每个<strong>SDNode</strong>有一个opcode，operands, type requirements，以及operation properties；</li>
 <li>接着，在DAG表示上，对指令进行操作。 <em>Instruction selection pass</em>被用于将non-native的DAG转换成native的目标特定指令。包括：<ul>
