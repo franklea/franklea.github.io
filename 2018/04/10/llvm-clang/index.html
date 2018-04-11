@@ -125,18 +125,18 @@
 
 
 
-<meta name="description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看，不求深挖，但求基础全面。本文主要是用于整理记录笔记，摘录一些我认为比较重要和有用的信息，作为日后参考。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机">
+<meta name="description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机，光从字面上来说看，仍然是一脸">
 <meta name="keywords" content="llvm,compiler">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LLVM编译器框架浅析">
 <meta property="og:url" content="http://franklea.github.io/2018/04/10/llvm-clang/index.html">
 <meta property="og:site_name" content="Franklea&#39;s Base">
-<meta property="og:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看，不求深挖，但求基础全面。本文主要是用于整理记录笔记，摘录一些我认为比较重要和有用的信息，作为日后参考。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机">
+<meta property="og:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机，光从字面上来说看，仍然是一脸">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-11T03:35:10.938Z">
+<meta property="og:updated_time" content="2018-04-11T06:45:05.966Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LLVM编译器框架浅析">
-<meta name="twitter:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看，不求深挖，但求基础全面。本文主要是用于整理记录笔记，摘录一些我认为比较重要和有用的信息，作为日后参考。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机">
+<meta name="twitter:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机，光从字面上来说看，仍然是一脸">
 
 
 
@@ -421,7 +421,7 @@
       
 
       
-        <p>很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。<br>最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看，不求深挖，但求基础全面。本文主要是用于整理记录笔记，摘录一些我认为比较重要和有用的信息，作为日后参考。</p>
+        <p>很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。<br>最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。</p>
 <h2 id="1-什么是LLVM"><a href="#1-什么是LLVM" class="headerlink" title="1, 什么是LLVM"></a>1, 什么是LLVM</h2><p>LLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机，光从字面上来说看，仍然是一脸懵逼，不知其所以然。</p>
 <p>官方介绍定义比较准确：A collection of modular and reusable tools to support both static and dynamic compilation of arbitrary programming languages. 理解一下，主要包含了这几层意思：</p>
 <ul>
@@ -461,7 +461,53 @@
 </ul>
 </li>
 </ul>
-<p>下表对LLVM和GNU编译器进行了对比。<br>|            | LLVM                         | GNU                      |<br>| ———- | —————————- | ———————— |<br>| Front-end  | Clang                        | CC1/CPP                  |<br>| Middle-end | LLVM                         | GCC                      |<br>| Back-end   | LLVM                         | GCC                      |<br>| Assembler  | LLVM(MC)                     | GAS                      |<br>| Linker     | LLD                          | GNU-LD                   |<br>| Libraries  | Compiler-RT, libc++(no libc) | libgcc, stdlibc++, glibc |<br>| Debugger   | LLDB/LLDBserver              | GDB/GDBserver            |</p>
+<p>下表对LLVM和GNU编译器进行了对比。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>LLVM</th>
+<th>GNU</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Front-end</td>
+<td>Clang</td>
+<td>CC1/CPP</td>
+</tr>
+<tr>
+<td>Middle-end</td>
+<td>LLVM</td>
+<td>GCC</td>
+</tr>
+<tr>
+<td>Back-end</td>
+<td>LLVM</td>
+<td>GCC</td>
+</tr>
+<tr>
+<td>Assembler</td>
+<td>LLVM(MC)</td>
+<td>GAS</td>
+</tr>
+<tr>
+<td>Linker</td>
+<td>LLD</td>
+<td>GNU-LD</td>
+</tr>
+<tr>
+<td>Libraries</td>
+<td>Compiler-RT, libc++(no libc)</td>
+<td>libgcc, stdlibc++, glibc</td>
+</tr>
+<tr>
+<td>Debugger</td>
+<td>LLDB/LLDBserver</td>
+<td>GDB/GDBserver</td>
+</tr>
+</tbody>
+</table>
 <h3 id="2-1-三个主要的LLVM组件"><a href="#2-1-三个主要的LLVM组件" class="headerlink" title="2.1 三个主要的LLVM组件"></a>2.1 三个主要的LLVM组件</h3><p>首先简单介绍一下LLVM中三个重要的组件，包括：</p>
 <ul>
 <li>LLVM虚拟指令集合<ul>
