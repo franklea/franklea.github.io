@@ -5,9 +5,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="http://franklea.github.io/"/>
   <updated>2018-04-11T03:35:10.938Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>http://franklea.github.io/</id>
   
   <author>
     <name>franklea</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>LLVM编译器框架浅析</title>
-    <link href="http://yoursite.com/2018/04/10/llvm-clang/"/>
-    <id>http://yoursite.com/2018/04/10/llvm-clang/</id>
+    <link href="http://franklea.github.io/2018/04/10/llvm-clang/"/>
+    <id>http://franklea.github.io/2018/04/10/llvm-clang/</id>
     <published>2018-04-10T01:08:17.000Z</published>
     <updated>2018-04-11T03:35:10.938Z</updated>
     
@@ -35,9 +35,9 @@
     </summary>
     
     
-      <category term="llvm" scheme="http://yoursite.com/tags/llvm/"/>
+      <category term="llvm" scheme="http://franklea.github.io/tags/llvm/"/>
     
-      <category term="compiler" scheme="http://yoursite.com/tags/compiler/"/>
+      <category term="compiler" scheme="http://franklea.github.io/tags/compiler/"/>
     
   </entry>
   
