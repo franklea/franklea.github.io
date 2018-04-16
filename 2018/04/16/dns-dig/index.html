@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="DNS,dig," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Franklea's Base" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Dig, domain information groper，是一款专门用于进行DNS查询的工具。 Dig以其灵活性，易用性，以及简明的输出得到了大多数DNS管理员的青睐。Dig支持命令行模式和批处理模式，批处理模式下，dig可以从文件中读取请求并批量处理。话不多说，进入正文。 通常，可使用如下命令使用dig:1dig @server -t &amp;lt;type&amp;gt; &amp;lt;name&amp;gt; &amp;l">
+<meta name="keywords" content="DNS,dig">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DNS学习与实践（二）—— dig简介">
+<meta property="og:url" content="http://franklea.github.io/2018/04/16/dns-dig/index.html">
+<meta property="og:site_name" content="Franklea&#39;s Base">
+<meta property="og:description" content="Dig, domain information groper，是一款专门用于进行DNS查询的工具。 Dig以其灵活性，易用性，以及简明的输出得到了大多数DNS管理员的青睐。Dig支持命令行模式和批处理模式，批处理模式下，dig可以从文件中读取请求并批量处理。话不多说，进入正文。 通常，可使用如下命令使用dig:1dig @server -t &amp;lt;type&amp;gt; &amp;lt;name&amp;gt; &amp;l">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-16T02:38:26.365Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DNS学习与实践（二）—— dig简介">
+<meta name="twitter:description" content="Dig, domain information groper，是一款专门用于进行DNS查询的工具。 Dig以其灵活性，易用性，以及简明的输出得到了大多数DNS管理员的青睐。Dig支持命令行模式和批处理模式，批处理模式下，dig可以从文件中读取请求并批量处理。话不多说，进入正文。 通常，可使用如下命令使用dig:1dig @server -t &amp;lt;type&amp;gt; &amp;lt;name&amp;gt; &amp;l">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://franklea.github.io/2018/04/16/dns-dig/"/>
+
+
+
+
+
+  <title>DNS学习与实践（二）—— dig简介 | Franklea's Base</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Franklea's Base</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://franklea.github.io/2018/04/16/dns-dig/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="franklea">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/guitar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Franklea's Base">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DNS学习与实践（二）—— dig简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-16T10:38:26+08:00">
+                2018-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/16/dns-dig/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/16/dns-dig/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Dig, domain information groper，是一款专门用于进行DNS查询的工具。 Dig以其灵活性，易用性，以及简明的输出得到了大多数DNS管理员的青睐。Dig支持命令行模式和批处理模式，批处理模式下，dig可以从文件中读取请求并批量处理。话不多说，进入正文。</p>
+<p>通常，可使用如下命令使用dig:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig @server -t &lt;type&gt; &lt;name&gt; &lt;flag&gt;</span><br></pre></td></tr></table></figure></p>
+<p>命令 “ <em>dig -h</em> ” 可显示dig的具体用法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">Usage:  dig [@global-server] [domain] [q-type] [q-class] &#123;q-opt&#125;</span><br><span class="line">            &#123;global-d-opt&#125; host [@local-server] &#123;local-d-opt&#125;</span><br><span class="line">            [ host [@local-server] &#123;local-d-opt&#125; [...]]</span><br><span class="line">Where:  domain	  is in the Domain Name System</span><br><span class="line">        q-class  is one of (in,hs,ch,...) [default: in]</span><br><span class="line">        q-type   is one of (a,any,mx,ns,soa,hinfo,axfr,txt,...) [default:a]</span><br><span class="line">                 (Use ixfr=version for type ixfr)</span><br><span class="line">        q-opt    is one of:</span><br><span class="line">                 -4                  (use IPv4 query transport only)</span><br><span class="line">                 -6                  (use IPv6 query transport only)</span><br><span class="line">                 -b address[#port]   (bind to source address/port)</span><br><span class="line">                 -c class            (specify query class)</span><br><span class="line">                 -f filename         (batch mode)</span><br><span class="line">                 -i                  (use IP6.INT for IPv6 reverse lookups)</span><br><span class="line">                 -k keyfile          (specify tsig key file)</span><br><span class="line">                 -m                  (enable memory usage debugging)</span><br><span class="line">                 -p port             (specify port number)</span><br><span class="line">                 -q name             (specify query name)</span><br><span class="line">                 -t type             (specify query type)</span><br><span class="line">                 -u                  (display times in usec instead of msec)</span><br><span class="line">                 -x dot-notation     (shortcut for reverse lookups)</span><br><span class="line">                 -y [hmac:]name:key  (specify named base64 tsig key)</span><br><span class="line">        d-opt    is of the form +keyword[=value], where keyword is:</span><br><span class="line">                 +[no]aaonly         (Set AA flag in query (+[no]aaflag))</span><br><span class="line">                 +[no]additional     (Control display of additional section)</span><br><span class="line">                 +[no]adflag         (Set AD flag in query (default on))</span><br><span class="line">                 +[no]all            (Set or clear all display flags)</span><br><span class="line">                 +[no]answer         (Control display of answer section)</span><br><span class="line">                 +[no]authority      (Control display of authority section)</span><br><span class="line">                 +[no]besteffort     (Try to parse even illegal messages)</span><br><span class="line">                 +bufsize=###        (Set EDNS0 Max UDP packet size)</span><br><span class="line">                 +[no]cdflag         (Set checking disabled flag in query)</span><br><span class="line">                 +[no]cl             (Control display of class in records)</span><br><span class="line">                 +[no]cmd            (Control display of command line)</span><br><span class="line">                 +[no]comments       (Control display of comment lines)</span><br><span class="line">                 +[no]crypto         (Control display of cryptographic fields in records)</span><br><span class="line">                 +[no]defname        (Use search list (+[no]search))</span><br><span class="line">                 +[no]dnssec         (Request DNSSEC records)</span><br><span class="line">                 +domain=###         (Set default domainname)</span><br><span class="line">                 +[no]edns[=###]     (Set EDNS version) [0]</span><br><span class="line">                 +ednsflags=###      (Set EDNS flag bits)</span><br><span class="line">                 +[no]ednsnegotiation (Set EDNS version negotiation)</span><br><span class="line">                 +ednsopt=###[:value] (Send specified EDNS option)</span><br><span class="line">                 +noednsopt          (Clear list of +ednsopt options)</span><br><span class="line">                 +[no]expire         (Request time to expire)</span><br><span class="line">                 +[no]fail           (Don&apos;t try next server on SERVFAIL)</span><br><span class="line">                 +[no]identify       (ID responders in short answers)</span><br><span class="line">                 +[no]ignore         (Don&apos;t revert to TCP for TC responses.)</span><br><span class="line">                 +[no]keepopen       (Keep the TCP socket open between queries)</span><br><span class="line">                 +[no]multiline      (Print records in an expanded format)</span><br><span class="line">                 +ndots=###          (Set search NDOTS value)</span><br><span class="line">                 +[no]nsid           (Request Name Server ID)</span><br><span class="line">                 +[no]nssearch       (Search all authoritative nameservers)</span><br><span class="line">                 +[no]onesoa         (AXFR prints only one soa record)</span><br><span class="line">                 +[no]opcode=[###]   (Set the opcode of the request)</span><br><span class="line">                 +[no]qr             (Print question before sending)</span><br><span class="line">                 +[no]question       (Control display of question section)</span><br><span class="line">                 +[no]recurse        (Recursive mode)</span><br><span class="line">                 +retry=###          (Set number of UDP retries) [2]</span><br><span class="line">                 +[no]rrcomments     (Control display of per-record comments)</span><br><span class="line">                 +[no]search         (Set whether to use searchlist)</span><br><span class="line">                 +[no]short          (Display nothing except short</span><br><span class="line">                                      form of answer)</span><br><span class="line">                 +[no]showsearch     (Search with intermediate results)</span><br><span class="line">                 +[no]split=##       (Split hex/base64 fields into chunks)</span><br><span class="line">                 +[no]stats          (Control display of statistics)</span><br><span class="line">                 +subnet=addr        (Set edns-client-subnet option)</span><br><span class="line">                 +[no]tcp            (TCP mode (+[no]vc))</span><br><span class="line">                 +time=###           (Set query timeout) [5]</span><br><span class="line">                 +[no]trace          (Trace delegation down from root [+dnssec])</span><br><span class="line">                 +tries=###          (Set number of UDP attempts) [3]</span><br><span class="line">                 +[no]ttlid          (Control display of ttls in records)</span><br><span class="line">                 +[no]vc             (TCP mode (+[no]tcp))</span><br><span class="line">        global d-opts and servers (before host name) affect all queries.</span><br><span class="line">        local d-opts and servers (after host name) affect only that lookup.</span><br><span class="line">        -h                           (print help and exit)</span><br><span class="line">        -v                           (print version and exit)</span><br></pre></td></tr></table></figure></p>
+<p>具体参数介绍如下，这里并不笼统翻译，仅对部分参数进行补充说明：</p>
+<p><strong>server</strong> : 所查询的name server的域名或者ip地址。可以是IPV4或IPV6地址，如果是主机名，dig在查询之前会将其解析成域名。若没有提供<em>server</em>参数，dig会默认查询/etc/resolve.conf中的第一个地址；若指定了“<em>-4</em>“或”<em>-6</em>“参数，则仅尝试对应的地址；若无可用地址，则dig发送请求到local host。</p>
+<p><strong>name</strong> : 要查询的域名。</p>
+<p><strong>type</strong> : 所查询的请求类型 - ANY, A, MX, SIG等等。若没提供type参数，则默认查询A记录。</p>
+<p>-4<br>           Use IPv4 only.</p>
+<p>-6<br>           Use IPv6 only.</p>
+<p>-b address[#port]<br>           Set the source IP address of the query. The address must be a valid address on one of the host’s network interfaces, or “0.0.0.0” or “::”. An optional port may be specified by appending “#<port>“</port></p>
+<p>-c class<br>           Set the query class. The default class is IN; other classes are HS for Hesiod records or CH for Chaosnet records. 域名所关联到的资料会放在资源记录(Resource Records, RR)中，这些记录被分成几种类别（class），不同类别的RR，分别记录相关的网络形态或软件，目前的类别有：internet(任何以TCP/IP为基础的internet架构)，以Chaosnet协议为基础的网络，以及使用Hesiod软件的网络（Chaosnet是一种古董级的网络）。</p>
+<p>-f file<br>           Batch mode: dig reads a list of lookup requests to process from the given file. Each line in the file should be organized in the same way they would be presented as queries to dig using the command-line interface.</p>
+<p>-i<br>           Do reverse IPv6 lookups using the obsolete RFC1886 IP6.INT domain, which is no longer in use. Obsolete bit string label queries (RFC2874) are not attempted.</p>
+<p>-k keyfile<br>           Sign queries using TSIG using a key read from the given file. Key files can be generated using tsig-keygen(8). When using TSIG authentication with dig, the name server that is queried needs to know the key and algorithm that is being used. In BIND, this is done by providing appropriate key and server statements in named.conf.<br>           TSIG提供DNS server在做Zone Transfer及DNS更新(更新zone的设定…)时对其传输资料所做的加密，并对其他DNS Server做认证； ”rndc” command使得使用者能远程管控DNS server，并对传输资料作加密， 以提高DNS server的安全防护。Transaction Signature(TSIG ; RFC 2845)是使用加密签名验证DNS信息，特別是回应与更新。TSIG以MD5 hash加密签名(cryptographic signature)方式，认证DNS server间的资料传输。</p>
+<p>-m<br>           Enable memory usage debugging.</p>
+<p>-p port<br>           Send the query to a non-standard port on the server, instead of the defaut port 53. This option would be used to test a name server that has been configured to listen for queries on a non-standard port number.</p>
+<p>-q name<br>           The domain name to query. This is useful to distinguish the name from other arguments.</p>
+<p>-t type<br>           The resource record type to query. It can be any valid query type which is supported in BIND 9. The default query type is “A”, unless the -x option is supplied to indicate a reverse lookup. A zone transfer can be requested by specifying a type of AXFR. When an incremental zone transfer (IXFR) is required, set the type to ixfr=N. The incremental zone transfer will contain the changes made to the zone since the serial number in the zone’s SOA record was N.</p>
+<p>-v<br>           Print the version number and exit.</p>
+<p>-x addr<br>           Simplified <strong>reverse lookups</strong>, for mapping addresses to names. The addr is an IPv4 address in dotted-decimal notation, or a colon-delimited IPv6 address. When the -x is used, there is no need to provide the name, class and type arguments.  dig automatically performs a lookup for a name like 94.2.0.192.in-addr.arpa and sets the query type and class to PTR and IN respectively. IPv6 addresses are looked up using nibble format under the IP6.ARPA domain (but see also the -i option).</p>
+<p>-y [hmac:]keyname:secret<br>           Sign queries using TSIG with the given authentication key.  keyname is the name of the key, and secret is the base64 encoded shared secret.  hmac is the name of the key algorithm; valid choices are hmac-md5, hmac-sha1, hmac-sha224, hmac-sha256, hmac-sha384, or hmac-sha512. If hmac is not specified, the default is hmac-md5.<br>           NOTE: You should use the -k option and avoid the -y option, because with -y the shared secret is supplied as a command line argument in clear text. This may be visible in the output from ps(1) or in a history file maintained by the user’s shell.</p>
+<p>另外，dig还提供了一些其他选项（flag），用于影响查询的方式和结果的呈现方式。<br>flag以 <strong>+keyword=value </strong> 的形式使用。具体的flag如下：</p>
+<p> +[no]aaonly<br>           Sets the “aa” flag in the query. <strong><em>Authoritative Answer.</em></strong></p>
+<p>+[no]additional<br>           Display [do not display] the additional section of a reply. The default is to display it.</p>
+<p>+[no]adflag<br>           Set [do not set] the AD (authentic data) bit in the query. This requests the server to return whether all of the answer and authority sections have all been validated as secure according to the security policy of the server. AD=1 indicates that all records have been validated as secure and the answer is not from a OPT-OUT range. AD=0 indicate that some part of the answer was insecure or not validated. This bit is set by default.</p>
+<p>+[no]all<br>           Set or clear all display flags.</p>
+<p>+[no]answer<br>           Display [do not display] the answer section of a reply. The default is to display it.</p>
+<p>+[no]authority<br>           Display [do not display] the authority section of a reply. The default is to display it.</p>
+<p>+[no]besteffort<br>           Attempt to display the contents of messages which are malformed. The default is to not display malformed answers.</p>
+<p>+bufsize=B<br>           Set the UDP message buffer size advertised using EDNS0 to B bytes. The maximum and minimum sizes of this buffer are 65535 and 0 respectively. Values outside this range are rounded up or down appropriately. Values other than zero will cause a EDNS query to be sent.</p>
+<p>+[no]cdflag<br>           Set [do not set] the CD (checking disabled) bit in the query. This requests the server to not perform DNSSEC validation of responses.</p>
+<p>+[no]class<br>           Display [do not display] the CLASS when printing the record.</p>
+<p>+[no]cmd<br>           Toggles the printing of the initial comment in the output identifying the version of dig and the query options that have been applied. This comment is printed by default.</p>
+<p>+[no]comments<br>           Toggle the display of comment lines in the output. The default is to print comments.</p>
+<p>+[no]crypto<br>           Toggle the display of cryptographic fields in DNSSEC records. The contents of these field are unnecessary to debug most DNSSEC validation failures and removing them makes it easier to see the common failures. The default is to display the fields. When omitted they are replaced by the string “[omitted]” or in the DNSKEY case the key id is displayed as the replacement, e.g. “[ key id = value]”.</p>
+<p>+[no]defname<br>           Deprecated, treated as a synonym for +[no]search</p>
+<p>+[no]dnssec<br>           Requests DNSSEC records be sent by setting the DNSSEC OK bit (DO) in the OPT record in the additional section of the query.</p>
+<p>+domain=somename<br>           Set the search list to contain the single domain somename, as if specified in a domain directive in /etc/resolv.conf, and enable search list processing as if the +search option were given.<br>+[no]edns[=#]<br>           Specify the EDNS version to query with. Valid values are 0 to 255. Setting the EDNS version will cause a EDNS query to be sent.  +noedns clears the remembered EDNS version. EDNS is set to 0 by default.</p>
+<p>+[no]ednsflags[=#]<br>           Set the must-be-zero EDNS flags bits (Z bits) to the specified value. Decimal, hex and octal encodings are accepted. Setting a named flag (e.g. DO) will silently be ignored. By default, no Z bits are set.</p>
+<p>+[no]ednsnegotiation<br>           Enable / disable EDNS version negotiation. By default EDNS version negotiation is enabled.</p>
+<p>+[no]ednsopt[=code[:value]]<br>           Specify EDNS option with code point code and optionally payload of value as a hexadecimal string. +noednsopt clears the EDNS options to to be sent.</p>
+<p>+[no]expire<br>           Send an EDNS Expire option.</p>
+<p>+[no]fail<br>           Do not try the next server if you receive a SERVFAIL. The default is to not try the next server which is the reverse of normal stub resolver behavior.</p>
+<p>+[no]identify<br>           Show [or do not show] the IP address and port number that supplied the answer when the +short option is enabled. If short form answers are requested, the default is not to show the source address and port number of the server that provided the answer.</p>
+<p>+[no]ignore<br>           Ignore truncation in UDP responses instead of retrying with TCP. By default, TCP retries are performed.</p>
+<p>+[no]keepopen<br>           Keep the TCP socket open between queries and reuse it rather than creating a new TCP socket for each lookup. The default is +nokeepopen.</p>
+<p>+[no]multiline<br>           Print records like the SOA records in a verbose multi-line format with human-readable comments. The default is to print each record on a single line, to facilitate machine parsing of the dig output.</p>
+<p>+ndots=D<br>           Set the number of dots that have to appear in name to D for it to be considered absolute. The default value is that defined using the ndots statement in /etc/resolv.conf, or 1 if no ndots statement is present. Names with fewer dots are interpreted as relative names and will be searched for in the domains listed in the search or domain directive in /etc/resolv.conf if +search is set.</p>
+<p>+[no]nsid<br>           Include an EDNS name server ID request when sending a query.</p>
+<p>+[no]nssearch<br>           When this option is set, dig attempts to find the authoritative name servers for the zone containing the name being looked up and display the SOA record that each name server has for the zone.</p>
+<p>+[no]onesoa<br>           Print only one (starting) SOA record when performing an AXFR. The default is to print both the starting and ending SOA records.</p>
+<p>+[no]opcode=value<br>           Set [restore] the DNS message opcode to the specified value. The default value is QUERY (0).</p>
+<p>+[no]qr<br>           Print [do not print] the query as it is sent. By default, the query is not printed.</p>
+<p>+[no]question<br>           Print [do not print] the question section of a query when an answer is returned. The default is to print the question section as a comment.<br>+[no]rdflag<br>           A synonym for +[no]recurse.</p>
+<p>+[no]recurse<br>           Toggle the setting of the RD (recursion desired) bit in the query. This bit is set by default, which means dig normally sends recursive queries. Recursion is automatically disabled when the +nssearch or +trace query options are used.</p>
+<p>+retry=T<br>           Sets the number of times to retry UDP queries to server to T instead of the default, 2. Unlike +tries, this does not include the initial query.</p>
+<p>+[no]rrcomments<br>           Toggle the display of per-record comments in the output (for example, human-readable key information about DNSKEY records). The default is not to print record comments unless multiline mode is active.</p>
+<p>+[no]search<br>           Use [do not use] the search list defined by the searchlist or domain directive in resolv.conf (if any).The search list is not used by default.<br>           ´ndots’ from resolv.conf (default 1) which may be overridden by +ndots determines if the name will be<br>           treated as relative or not and hence whether a search is eventually performed or not.</p>
+<p>+[no]short<br>           Provide a terse answer. The default is to print the answer in a verbose form.</p>
+<p>+[no]showsearch<br>           Perform [do not perform] a search showing intermediate results.</p>
+<p>+[no]sigchase<br>           Chase DNSSEC signature chains. Requires dig be compiled with -DDIG_SIGCHASE.</p>
+<p>+[no]sit[=####]<br>           Send a Source Identity Token EDNS option, with optional value. Replaying a SIT from a previous response will allow the server to identify a previous client. The default is +nosit. Currently using experimental value 65001 for the option code.</p>
+<p>+split=W<br>           Split long hex- or base64-formatted fields in resource records into chunks of W characters (where W is rounded up to the nearest multiple of 4).  +nosplit or +split=0 causes fields not to be split at all. The default is 56 characters, or 44 characters when multiline mode is active.</p>
+<p>+[no]stats<br>           This query option toggles the printing of statistics: when the query was made, the size of the reply and so on. The default behavior is to print the query statistics.</p>
+<p>+[no]subnet=addr/prefix<br>           Send an EDNS Client Subnet option with the specified IP address or network prefix.</p>
+<p>+[no]tcp<br>           Use [do not use] TCP when querying name servers. The default behavior is to use UDP unless an ixfr=N query is requested, in which case the default is TCP. AXFR queries always use TCP.</p>
+<p>+time=T<br>           Sets the timeout for a query to T seconds. The default timeout is 5 seconds. An attempt to set T to less than 1 will result in a query timeout of 1 second being applied.</p>
+<p>+[no]topdown<br>           When chasing DNSSEC signature chains perform a top-down validation. Requires dig be compiled with -DDIG_SIGCHASE.<br>+[no]rdflag<br>           A synonym for +[no]recurse.</p>
+<p>+[no]recurse<br>           Toggle the setting of the RD (recursion desired) bit in the query. This bit is set by default, which<br>           means dig normally sends recursive queries. Recursion is automatically disabled when the +nssearch or<br>           +trace query options are used.</p>
+<p>+retry=T<br>           Sets the number of times to retry UDP queries to server to T instead of the default, 2. Unlike +tries,<br>           this does not include the initial query.</p>
+<p>+[no]rrcomments<br>           Toggle the display of per-record comments in the output (for example, human-readable key information<br>           about DNSKEY records). The default is not to print record comments unless multiline mode is active.</p>
+<p>+[no]search<br>           Use [do not use] the search list defined by the searchlist or domain directive in resolv.conf (if any).<br>           The search list is not used by default.<br>           ´ndots’ from resolv.conf (default 1) which may be overridden by +ndots determines if the name will be<br>           treated as relative or not and hence whether a search is eventually performed or not.</p>
+<p>+[no]short<br>           Provide a terse answer. The default is to print the answer in a verbose form.</p>
+<p>+[no]showsearch<br>           Perform [do not perform] a search showing intermediate results.</p>
+<p>+[no]sigchase<br>           Chase DNSSEC signature chains. Requires dig be compiled with -DDIG_SIGCHASE.</p>
+<p>+[no]sit[=####]<br>           Send a Source Identity Token EDNS option, with optional value. Replaying a SIT from a previous response<br>           will allow the server to identify a previous client. The default is +nosit. Currently using<br>           experimental value 65001 for the option code.</p>
+<p>+split=W<br>           Split long hex- or base64-formatted fields in resource records into chunks of W characters (where W is<br>           rounded up to the nearest multiple of 4).  +nosplit or +split=0 causes fields not to be split at all.<br>           The default is 56 characters, or 44 characters when multiline mode is active.</p>
+<p>+[no]stats<br>           This query option toggles the printing of statistics: when the query was made, the size of the reply<br>           and so on. The default behavior is to print the query statistics.</p>
+<p>+[no]subnet=addr/prefix<br>           Send an EDNS Client Subnet option with the specified IP address or network prefix.</p>
+<p>+[no]tcp<br>           Use [do not use] TCP when querying name servers. The default behavior is to use UDP unless an ixfr=N<br>           query is requested, in which case the default is TCP. AXFR queries always use TCP.</p>
+<p>+time=T<br>           Sets the timeout for a query to T seconds. The default timeout is 5 seconds. An attempt to set T to<br>           less than 1 will result in a query timeout of 1 second being applied.</p>
+<p>+[no]topdown<br>           When chasing DNSSEC signature chains perform a top-down validation. Requires dig be compiled with<br>           -DDIG_SIGCHASE.<br>+[no]rdflag<br>           A synonym for +[no]recurse.</p>
+<p>+[no]recurse<br>           Toggle the setting of the RD (recursion desired) bit in the query. This bit is set by default, which<br>           means dig normally sends recursive queries. Recursion is automatically disabled when the +nssearch or<br>           +trace query options are used.</p>
+<p>+retry=T<br>           Sets the number of times to retry UDP queries to server to T instead of the default, 2. Unlike +tries,<br>           this does not include the initial query.</p>
+<p>+[no]rrcomments<br>           Toggle the display of per-record comments in the output (for example, human-readable key information<br>           about DNSKEY records). The default is not to print record comments unless multiline mode is active.</p>
+<p>+[no]search<br>           Use [do not use] the search list defined by the searchlist or domain directive in resolv.conf (if any).<br>           The search list is not used by default.<br>           ´ndots’ from resolv.conf (default 1) which may be overridden by +ndots determines if the name will be<br>           treated as relative or not and hence whether a search is eventually performed or not.</p>
+<p>+[no]short<br>           Provide a terse answer. The default is to print the answer in a verbose form.</p>
+<p>+[no]showsearch<br>           Perform [do not perform] a search showing intermediate results.</p>
+<p>+[no]sigchase<br>           Chase DNSSEC signature chains. Requires dig be compiled with -DDIG_SIGCHASE.</p>
+<p>+[no]sit[=####]<br>           Send a Source Identity Token EDNS option, with optional value. Replaying a SIT from a previous response<br>           will allow the server to identify a previous client. The default is +nosit. Currently using<br>           experimental value 65001 for the option code.</p>
+<p>+split=W<br>           Split long hex- or base64-formatted fields in resource records into chunks of W characters (where W is<br>           rounded up to the nearest multiple of 4).  +nosplit or +split=0 causes fields not to be split at all.<br>           The default is 56 characters, or 44 characters when multiline mode is active.</p>
+<p>+[no]stats<br>           This query option toggles the printing of statistics: when the query was made, the size of the reply<br>           and so on. The default behavior is to print the query statistics.</p>
+<p>+[no]subnet=addr/prefix<br>           Send an EDNS Client Subnet option with the specified IP address or network prefix.</p>
+<p>+[no]tcp<br>           Use [do not use] TCP when querying name servers. The default behavior is to use UDP unless an ixfr=N<br>           query is requested, in which case the default is TCP. AXFR queries always use TCP.</p>
+<p>+time=T<br>           Sets the timeout for a query to T seconds. The default timeout is 5 seconds. An attempt to set T to<br>           less than 1 will result in a query timeout of 1 second being applied.</p>
+<p>+[no]topdown<br>           When chasing DNSSEC signature chains perform a top-down validation. Requires dig be compiled with -DDIG_SIGCHASE.<br> +[no]trace<br>           Toggle tracing of the delegation path from the root name servers for the name being looked up. Tracing is disabled by default. When tracing is enabled, dig makes iterative queries to resolve the name being looked up. It will follow referrals from the root servers, showing the answer from each server that was<br>           used to resolve the lookup.<br>           If @server is also specified, it affects only the initial query for the root zone name servers.<br>           +dnssec is also set when +trace is set to better emulate the default queries from a nameserver.</p>
+<p>+tries=T<br>           Sets the number of times to try UDP queries to server to T instead of the default, 3. If T is less than or equal to zero, the number of tries is silently rounded up to 1.</p>
+<p>+trusted-key=####<br>           Specifies a file containing trusted keys to be used with +sigchase. Each DNSKEY record must be on its own line.<br>           If not specified, dig will look for /etc/trusted-key.key then trusted-key.key in the current directory.<br>           Requires dig be compiled with -DDIG_SIGCHASE.</p>
+<p>+[no]ttlid<br>           Display [do not display] the TTL when printing the record.</p>
+<p>+[no]vc<br>           Use [do not use] TCP when querying name servers. This alternate syntax to +[no]tcp is provided for<br>           backwards compatibility. The “vc” stands for “virtual circuit”.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    franklea
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://franklea.github.io/2018/04/16/dns-dig/" title="DNS学习与实践（二）—— dig简介">http://franklea.github.io/2018/04/16/dns-dig/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DNS/" rel="tag"><i class="fa fa-tag"></i> DNS</a>
+          
+            <a href="/tags/dig/" rel="tag"><i class="fa fa-tag"></i> dig</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/10/llvm-clang/" rel="next" title="LLVM编译器框架浅析">
+                <i class="fa fa-chevron-left"></i> LLVM编译器框架浅析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/guitar.png"
+                alt="franklea" />
+            
+              <p class="site-author-name" itemprop="name">franklea</p>
+              <p class="site-description motion-element" itemprop="description">The quieter you become, the more you are able to hear.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franklea" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:junliplay@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://brieflyx.me/" title="BrieflyX's Base" target="_blank">BrieflyX's Base</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://misty.moe/" title="Misty的小窝" target="_blank">Misty的小窝</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://paper.seebug.org/" title="SeeBug Paper" target="_blank">SeeBug Paper</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Franklea. All Rights Reserved.</span>
+
+  
+</div>
+
+                                               
+
+
+
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://franklea-github-io.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://franklea.github.io/2018/04/16/dns-dig/';
+          this.page.identifier = '2018/04/16/dns-dig/';
+          this.page.title = 'DNS学习与实践（二）—— dig简介';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://franklea-github-io.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
