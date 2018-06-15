@@ -136,7 +136,7 @@
 <meta property="og:image" content="http://franklea.github.io/images/llvm-front-end.svg">
 <meta property="og:image" content="http://franklea.github.io/images/llvm-midend.svg">
 <meta property="og:image" content="http://franklea.github.io/images/llvm-backend.svg">
-<meta property="og:updated_time" content="2018-04-11T08:52:08.485Z">
+<meta property="og:updated_time" content="2018-06-15T03:07:27.295Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LLVM编译器框架浅析">
 <meta name="twitter:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。 1, 什么是LLVMLLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机，光从字面上来说看，仍然是一脸">
@@ -565,7 +565,7 @@
 </blockquote>
 <p>LLVM同样提供了如何编写一个LLVM后端的<a href="https://llvm.org/docs/WritingAnLLVMBackend.html" target="_blank" rel="noopener">参考文档</a>。<br>这里仅列出基本的步骤，用于对整个过程有一个大概的了解，如下：</p>
 <ul>
-<li>创建类<strong>TargetMachine</strong>的自雷，用于描述目标机器的特征；</li>
+<li>创建类<strong>TargetMachine</strong>的子类，用于描述目标机器的特征；</li>
 <li>定义目标寄存器集合。使用TableGen，根据目标特定的RegisterInfo.td文件生成寄存器定义、寄存器依赖、寄存器类型的代码。编写<strong>TargetRegisterInfo</strong>的子类；</li>
 <li>定义LLVM IR从指令的DAG表示到本地目标指令的选择和变换；</li>
 <li>编写一个将LLVM IR转换成目标机器GAS (GNU Assembler)格式的assembly printer（用于生成汇编指令输出文件）；</li>
