@@ -125,18 +125,18 @@
 
 
 
-<meta name="description" content="最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。 这里使用了 qemu-nbd 这个工具，该工具能够将磁盘镜像文件导出为一个network block device（nbd）。操作步">
+<meta name="description" content="最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。">
 <meta name="keywords" content="qemu,qcow2">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux下挂载qcow2镜像文件">
 <meta property="og:url" content="http://franklea.github.io/2018/07/31/mountqcow2/index.html">
 <meta property="og:site_name" content="Franklea&#39;s Base">
-<meta property="og:description" content="最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。 这里使用了 qemu-nbd 这个工具，该工具能够将磁盘镜像文件导出为一个network block device（nbd）。操作步">
+<meta property="og:description" content="最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-31T03:46:19.650Z">
+<meta property="og:updated_time" content="2018-07-31T03:47:13.582Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux下挂载qcow2镜像文件">
-<meta name="twitter:description" content="最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。 这里使用了 qemu-nbd 这个工具，该工具能够将磁盘镜像文件导出为一个network block device（nbd）。操作步">
+<meta name="twitter:description" content="最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。">
 
 
 
@@ -426,7 +426,7 @@
       
 
       
-        <p>最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。<br>系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。</p>
+        <p>最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。<br>系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。<br><a id="more"></a></p>
 <p>这里使用了 <strong>qemu-nbd</strong> 这个工具，该工具能够将磁盘镜像文件导出为一个network block device（nbd）。<br>操作步骤如下：</p>
 <ul>
 <li><p>安装qemu-nbd。我的qemu环境是从源码编译安装的，已经包含了qemu-nbd。若没有安装也可单独安装：</p>

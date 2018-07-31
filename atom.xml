@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://franklea.github.io/"/>
-  <updated>2018-07-31T03:46:19.650Z</updated>
+  <updated>2018-07-31T03:47:13.582Z</updated>
   <id>http://franklea.github.io/</id>
   
   <author>
@@ -21,16 +21,13 @@
     <link href="http://franklea.github.io/2018/07/31/mountqcow2/"/>
     <id>http://franklea.github.io/2018/07/31/mountqcow2/</id>
     <published>2018-07-31T03:18:10.000Z</published>
-    <updated>2018-07-31T03:46:19.650Z</updated>
+    <updated>2018-07-31T03:47:13.582Z</updated>
     
-    <content type="html"><![CDATA[<p>最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。<br>系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。</p><p>这里使用了 <strong>qemu-nbd</strong> 这个工具，该工具能够将磁盘镜像文件导出为一个network block device（nbd）。<br>操作步骤如下：</p><ul><li><p>安装qemu-nbd。我的qemu环境是从源码编译安装的，已经包含了qemu-nbd。若没有安装也可单独安装：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">╰─$ sudo apt-get install qemu-utils</span><br></pre></td></tr></table></figure></li><li><p>在挂在qcow2镜像文件之前，先将其转换为nbd。第一条命令记载ndb内核模块，且设置nbd管理的最大分区数为8。接着第二条命令将指定的镜像文件导出为一个nbd设备。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">╰─$ sudo modprobe nbd max_part=8</span><br><span class="line">╰─$ sudo qemu-nbd --connect=/dev/nbd0 /path/to/qcow2/image</span><br></pre></td></tr></table></figure></li><li><p>在这之后，qcow2镜像文件中的磁盘分区会被映射到/dev/nbd0p1, /dev/nbd0p2/…等分区中，可以用fdisk工具进行查看。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">╰─$ sudo fdisk /dev/nbd0 -l</span><br></pre></td></tr></table></figure></li><li><p>最后，可以选择其中的任一个分区挂载到系统上。如此，就可以直接访问和修改镜像文件中的文件了。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">╰─$ sudo mount /dev/nbd0p1 /mnt</span><br></pre></td></tr></table></figure></li><li><p>操作结束后，umount后再断开设备链接即可。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">╰─$ sudo umount /mnt</span><br><span class="line">╰─$ sudo qemu-nbd --disconnect /dev/nbd0</span><br></pre></td></tr></table></figure></li></ul><h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ol><li><a href="http://ask.xmodulo.com/mount-qcow2-disk-image-linux.html" target="_blank" rel="noopener">How to mount qcow2 disk image on Linux</a></li></ol>]]></content>
+    <content type="html"><![CDATA[<p>最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。<br>系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。<br><a id="more"></a></p><p>这里使用了 <strong>qemu-nbd</strong> 这个工具，该工具能够将磁盘镜像文件导出为一个network block device（nbd）。<br>操作步骤如下：</p><ul><li><p>安装qemu-nbd。我的qemu环境是从源码编译安装的，已经包含了qemu-nbd。若没有安装也可单独安装：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">╰─$ sudo apt-get install qemu-utils</span><br></pre></td></tr></table></figure></li><li><p>在挂在qcow2镜像文件之前，先将其转换为nbd。第一条命令记载ndb内核模块，且设置nbd管理的最大分区数为8。接着第二条命令将指定的镜像文件导出为一个nbd设备。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">╰─$ sudo modprobe nbd max_part=8</span><br><span class="line">╰─$ sudo qemu-nbd --connect=/dev/nbd0 /path/to/qcow2/image</span><br></pre></td></tr></table></figure></li><li><p>在这之后，qcow2镜像文件中的磁盘分区会被映射到/dev/nbd0p1, /dev/nbd0p2/…等分区中，可以用fdisk工具进行查看。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">╰─$ sudo fdisk /dev/nbd0 -l</span><br></pre></td></tr></table></figure></li><li><p>最后，可以选择其中的任一个分区挂载到系统上。如此，就可以直接访问和修改镜像文件中的文件了。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">╰─$ sudo mount /dev/nbd0p1 /mnt</span><br></pre></td></tr></table></figure></li><li><p>操作结束后，umount后再断开设备链接即可。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">╰─$ sudo umount /mnt</span><br><span class="line">╰─$ sudo qemu-nbd --disconnect /dev/nbd0</span><br></pre></td></tr></table></figure></li></ul><h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ol><li><a href="http://ask.xmodulo.com/mount-qcow2-disk-image-linux.html" target="_blank" rel="noopener">How to mount qcow2 disk image on Linux</a></li></ol>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;p&gt;最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。&lt;br&gt;系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。
-      
+      &lt;p&gt;最近在对某IOT设备作分析时，有一个需求是需要从系统中提取出系统中的一个文件。&lt;br&gt;系统的镜像文件以qcow2格式提供，一种很直观的方式是对qemu的网络进行配置，然后利用网络进行传输。但qemu的网络配置是出了名的坑多，于是尝试直接从qcow2镜像文件中把文件提取出来。&lt;br&gt;
     
     </summary>
     
