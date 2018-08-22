@@ -112,7 +112,7 @@
 
 
 
-  <meta name="keywords" content="llvm,compiler," />
+  <meta name="keywords" content="qemu," />
 
 
 
@@ -125,22 +125,21 @@
 
 
 
-<meta name="description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。">
-<meta name="keywords" content="llvm,compiler">
+<meta name="description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。  一、概述Qemu的">
+<meta name="keywords" content="qemu">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LLVM编译器框架浅析">
-<meta property="og:url" content="http://franklea.github.io/2018/04/10/llvm-clang/index.html">
+<meta property="og:title" content="Qemu网络连接">
+<meta property="og:url" content="http://franklea.github.io/2018/08/22/qemu-networking/index.html">
 <meta property="og:site_name" content="Franklea&#39;s Base">
-<meta property="og:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。">
+<meta property="og:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。  一、概述Qemu的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://franklea.github.io/images/llvm-front-end.svg">
-<meta property="og:image" content="http://franklea.github.io/images/llvm-midend.svg">
-<meta property="og:image" content="http://franklea.github.io/images/llvm-backend.svg">
-<meta property="og:updated_time" content="2018-08-06T07:55:13.406Z">
+<meta property="og:image" content="http://franklea.github.io/images/qemu-slirp.png">
+<meta property="og:image" content="http://franklea.github.io/images/qemu-tap.png">
+<meta property="og:updated_time" content="2018-08-22T06:37:02.345Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LLVM编译器框架浅析">
-<meta name="twitter:description" content="很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。">
-<meta name="twitter:image" content="http://franklea.github.io/images/llvm-front-end.svg">
+<meta name="twitter:title" content="Qemu网络连接">
+<meta name="twitter:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。  一、概述Qemu的">
+<meta name="twitter:image" content="http://franklea.github.io/images/qemu-slirp.png">
 
 
 
@@ -170,13 +169,13 @@
 
 
 
-  <link rel="canonical" href="http://franklea.github.io/2018/04/10/llvm-clang/"/>
+  <link rel="canonical" href="http://franklea.github.io/2018/08/22/qemu-networking/"/>
 
 
 
 
 
-  <title>LLVM编译器框架浅析 | Franklea's Base</title>
+  <title>Qemu网络连接 | Franklea's Base</title>
   
 
 
@@ -347,7 +346,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://franklea.github.io/2018/04/10/llvm-clang/">
+    <link itemprop="mainEntityOfPage" href="http://franklea.github.io/2018/08/22/qemu-networking/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="franklea">
@@ -364,7 +363,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">LLVM编译器框架浅析</h1>
+          <h1 class="post-title" itemprop="name headline">Qemu网络连接</h1>
         
 
         <div class="post-meta">
@@ -376,8 +375,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-10T09:08:17+08:00">
-                2018-04-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-22T14:37:02+08:00">
+                2018-08-22
               </time>
             
 
@@ -387,28 +386,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/llvm/" itemprop="url" rel="index">
-                    <span itemprop="name">llvm</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -417,9 +394,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/10/llvm-clang/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/22/qemu-networking/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/10/llvm-clang/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/22/qemu-networking/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -452,151 +429,116 @@
       
 
       
-        <p>很早就开始接触和使用LLVM，而且垂涎其丰富的工具和扩展功能已久，但一直处于现学现用的阶段，对LLVM的理解也一直是雾里看花。<br>最近正好需要再次用到LLVM，借此机会把LLVM系统的看一看。本文力求从原理和结构上对LLVM有一个基本概述，不求深挖，但求基础全面。</p>
-<a id="more"></a> 
-<h2 id="1-什么是LLVM"><a href="#1-什么是LLVM" class="headerlink" title="1, 什么是LLVM"></a>1, 什么是LLVM</h2><p>LLVM从字面上来说是Low-level Virtual Machine，即底层的虚拟机，光从字面上来说看，仍然是一脸懵逼，不知其所以然。</p>
-<p>官方介绍定义比较准确：A collection of modular and reusable tools to support both static and dynamic compilation of arbitrary programming languages. 理解一下，主要包含了这几层意思：</p>
+        <hr>
+<p>关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：<br>1.Qemu虚拟机如何通过网络与外界连接？<br>2.Qemu提供哪几种连接方式？<br>3.该连接方式支持哪些设备？ 如何配置？</p>
+<p>在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。</p>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Qemu的网络配置由两部分组成：</p>
 <ul>
-<li>1，当然，是编译器（或者编译框架）</li>
-<li>2，包含了一个模块化、可重用的工具集；</li>
-<li>3，支持静态和动态编译；</li>
-<li>4，跨语言。</li>
+<li>虚拟网络设备，如PCI网卡</li>
+<li>网络后端，用于和网络设备交互，如将数据包发往宿主机网络</li>
 </ul>
-<p>总之，LLVM是一套很强大的编译系统。</p>
-<p>此外，LLVM提供了许多工业级的工具和库，包含了许多子项目，其中最有名的当属Clang。LLVM在工业界也得到了广泛的使用，包括Adobe, Apple, Intel, NVIDIA……等等等等。</p>
-<p>总结一下，LLVM具有使用简单（相对而言）， 快速，模块化等诸多有点，it is cool!</p>
-<h2 id="2-LLVM-编译系统"><a href="#2-LLVM-编译系统" class="headerlink" title="2, LLVM 编译系统"></a>2, LLVM 编译系统</h2><p>LLVM编译系统可分为编译器基础组件和编译器框架两部分。</p>
-<p>LLVM编译器基础组件为构建编译器提供了可重用的组件，使得构建一个新的编译器的时间开销更小，也为LLVM编译器提供了更多的功能和更好的扩展性。<br>LLVM编译器框架提供了一种编译器框架，通过框架将LLVM编译系统中的基础组件进行组合连接，进而形成具备特定属性、满足特定需求的编译器。框架包含前端、中端和后端三个部分。简单地说，前端将目标语言翻译成LLVM中间语言（LLVM IR），中端基于LLVM IR对程序进行优化分析等，后端将LLVM IR翻译成目标架构的机器指令。整理LLVM编译系统的整体内容如下：</p>
+<p>默认情况下，Qemu会为客户机创建一个<a href="https://en.wikipedia.org/wiki/Slirp" target="_blank" rel="noopener">SLiRP</a>网络后端以及一个合适的虚拟网络设备（如， 为大多数X86 PC客户机创建一块E1000 PCI网卡）。<br>使用”-net nic -net user”命令选项会产生同样的效果。</p>
+<p>针对Qemu网络模拟有以下几点需要注意：</p>
 <ul>
-<li>前端：<ul>
-<li>Clang(C/C++/ObjC/OpenCL/OpenMP), flang(Fortran), LDC(D), PGI’s Fortran, etc.</li>
+<li>1.如果使用命令参数（-net, -netdev）指定任何网络选项，务必提供充分的选项信息，以确定设备和后端的连接。忘记指定后端或这网络设备将产生一条警告信息，如，此时VM能正常boot但没有网络功能。</li>
+<li>2.如果使用默认的SLiRP用户网络，ping(ICMP)功能不工作，但TCP和UDP正常工作。此时，不要使用ping来检查Qemu虚拟机的网络配置！</li>
 </ul>
-</li>
-<li>前端插件:<ul>
-<li>Static analyser, clang-tidy, clang-format, clang-complete, etc.</li>
-</ul>
-</li>
-<li>中端:<ul>
-<li>Optimiztion and Analysis passes, integration with Polly, etc.</li>
-</ul>
-</li>
-<li>后端<ul>
-<li>JIT(MC and ORC), targets: ARM, AArch64, MIPS, PPC, x86, GPUs, BPF, WebAsm, etc.</li>
-</ul>
-</li>
-<li>库<ul>
-<li>Compiler-RT, libc++/abi, libunwind, OpenMP, libCL, etc.</li>
-</ul>
-</li>
-<li>工具<ul>
-<li>LLD, LLDB, LNT, readobj, llc, lli, bugpoint, objdump, lto, etc.</li>
-</ul>
-</li>
-</ul>
-<p>下表对LLVM和GNU编译器进行了对比。</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>LLVM</th>
-<th>GNU</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Front-end</td>
-<td>Clang</td>
-<td>CC1/CPP</td>
-</tr>
-<tr>
-<td>Middle-end</td>
-<td>LLVM</td>
-<td>GCC</td>
-</tr>
-<tr>
-<td>Back-end</td>
-<td>LLVM</td>
-<td>GCC</td>
-</tr>
-<tr>
-<td>Assembler</td>
-<td>LLVM(MC)</td>
-<td>GAS</td>
-</tr>
-<tr>
-<td>Linker</td>
-<td>LLD</td>
-<td>GNU-LD</td>
-</tr>
-<tr>
-<td>Libraries</td>
-<td>Compiler-RT, libc++(no libc)</td>
-<td>libgcc, stdlibc++, glibc</td>
-</tr>
-<tr>
-<td>Debugger</td>
-<td>LLDB/LLDBserver</td>
-<td>GDB/GDBserver</td>
-</tr>
-</tbody>
-</table>
-<h3 id="2-1-三个主要的LLVM组件"><a href="#2-1-三个主要的LLVM组件" class="headerlink" title="2.1 三个主要的LLVM组件"></a>2.1 三个主要的LLVM组件</h3><p>首先简单介绍一下LLVM中三个重要的组件，包括：</p>
+<h2 id="二、网络后端"><a href="#二、网络后端" class="headerlink" title="二、网络后端"></a>二、网络后端</h2><h3 id="1-如何创建网络后端"><a href="#1-如何创建网络后端" class="headerlink" title="1.如何创建网络后端"></a>1.如何创建网络后端</h3><p>根据宿主机环境，Qemu提供了多个候选网络后端。创建一个网络后端的命令为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-netdev TYPE,id=NAME,...</span><br></pre></td></tr></table></figure></p>
+<p>id选项有两个作用：1.用于区分不同的网络后端，即使只有一个网络后端也必须使用；2.给定的NAME用于将虚拟网络设备和玩过后端关联起来.</p>
+<h3 id="2-网络后端分类"><a href="#2-网络后端分类" class="headerlink" title="2.网络后端分类"></a>2.网络后端分类</h3><p>通常，若客户机仅仅需要基础的上网功能，如访问一下网页，那么用户模式（slirp）是一个不错的选择。若还有额外的需求，如需要运行某类网络服务或者需要网络以其他方式运行，那么tap通常是最好的选择。<br>换言之，如果你想要简单，那么使用用户模式以及DHCP上网，如果想要严格的控制IP地址和路由，那么使用TUN/TAP网络接口。</p>
+<h4 id="2-1-用户模式"><a href="#2-1-用户模式" class="headerlink" title="2.1.用户模式"></a>2.1.用户模式</h4><h5 id="2-1-1-用户模式网络特点"><a href="#2-1-1-用户模式网络特点" class="headerlink" title="2.1.1 用户模式网络特点"></a>2.1.1 用户模式网络特点</h5><p>用户模式是Qemu默认的网络后端，使用简单，无需root/Administrator权限，但有如下限制：</p>
 <ul>
-<li>LLVM虚拟指令集合<ul>
-<li>具备语言通用性，且目标无关的IR；</li>
-<li>提供了内部IR和固定的外部表示；</li>
-<li>为表示和修改程序提供了一种通用的方式。</li>
-</ul>
+<li>开销较大，性能较差；（纯软件模拟实现）</li>
+<li>仅支持TCP和UDP协议，通常，ICMP流量无法工作，即客户机内无法ping</li>
+<li>在Linux宿主机上，通过在root权限下进行配置可以使得客户机能够ping。（具体操作如下）</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Enabling ping in the guest, on Linux hosts</span><br><span class="line"></span><br><span class="line">Determine the main group ID (or one supplementary group ID) of the user that will run QEMU with slirp.</span><br><span class="line">In /etc/sysctl.conf (or whatever is appropriate for your host distro), make sure that the whitespace-separated, inclusive group ID range in the net.ipv4.ping_group_range sysctl includes the above group ID.</span><br><span class="line">For example, as root,</span><br><span class="line"></span><br><span class="line">add a new group called unpriv_ping:</span><br><span class="line">groupadd unpriv_ping</span><br><span class="line">set this group for a number of users as another supplementary group (note, they will have to re-login):</span><br><span class="line">for U in user1 user2 ... user_n; do</span><br><span class="line">  usermod --append --groups unpriv_ping $U</span><br><span class="line">done</span><br><span class="line">then set both sides of the inclusive range in the above sysctl to the numeric ID of the new group:</span><br><span class="line">(</span><br><span class="line">  GROUP_ID=$(getent group unpriv_ping | cut -f 3 -d :)</span><br><span class="line">  printf &apos;net.ipv4.ping_group_range = %u %u\n&apos; $GROUP_ID $GROUP_ID \</span><br><span class="line">    &gt;&gt; /etc/sysctl.conf</span><br><span class="line">)</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
 </li>
-<li>一批良好集成的库<ul>
-<li>分析，优化，代码生成，JIT，垃圾回收机制，profiling等等；</li>
-<li>无需自己造轮子。</li>
-</ul>
-</li>
-<li>一批基于库构建的工具<ul>
-<li>汇编器，自动调试器，链接器，代码生成，编译程序驱动器，模块优化等等；</li>
-<li>与正常的编译过程相结合。</li>
-</ul>
+<li><p>客户机无法直接被宿主机或外部网络访问。</p>
 </li>
 </ul>
-<h3 id="2-2-前端"><a href="#2-2-前端" class="headerlink" title="2.2 前端"></a>2.2 前端</h3><p>和所有编译器前端类似，LLVM编译器前端对目标源代码进行解析，最终生成LLVM IR.</p>
-<p> <img src="/images/llvm-front-end.svg" alt=""></p>
-<h3 id="2-3-中端"><a href="#2-3-中端" class="headerlink" title="2.3 中端"></a>2.3 中端</h3><p>中端接着前端的工作，在IR的基础上对程序进行转换和优化，如下图。</p>
-<p><img src="/images/llvm-midend.svg" alt=""></p>
-<p>要理解中端的优化过程，理解Pass非常重要。<br>如LLVM官网所述：</p>
-<blockquote>
-<p>The LLVM Pass Framework is an important part of the LLVM system, because LLVM passes are where most of the interesting parts of the compiler exist. Passes perform the transformations and optimizations that make up the compiler, they build the analysis results that are used by these transformations, and they are, above all, a structuring technique for compiler code.</p>
-</blockquote>
-<p>关于如何写一个Pass，LLVM官网提供了非常详细的<a href="https://llvm.org/docs/WritingAnLLVMPass.html" target="_blank" rel="noopener">参考文档</a>。</p>
-<p>LLVM编译系统中对程序的优化分为多个步骤——也可说多个Pass——进行。每个Pass中对IR进行变换和优化，多个Pass组合完成编译器进行的所有优化行为。如上图所示，多个Pass阶段共同完成了中端的分析和优化。</p>
-<h3 id="2-4-后端"><a href="#2-4-后端" class="headerlink" title="2.4 后端"></a>2.4 后端</h3><p>后端将中端转换和优化后的IR翻译成目标架构的汇编语言。转换的过程如下图所示：</p>
-<p><img src="/images/llvm-backend.svg" alt=""></p>
+<h5 id="2-1-2-用户模式网络原理"><a href="#2-1-2-用户模式网络原理" class="headerlink" title="2.1.2 用户模式网络原理"></a>2.1.2 用户模式网络原理</h5><p>用户模式网络基于slirp实现，slirp在Qemu内实现了一套完整的TCP/IP协议栈，基于该协议栈实现了一个虚拟的NAT’d网络。一个典型（默认）的用户网络如下图。</p>
+<p><img src="/images/qemu-slirp.png" alt=""></p>
+<p>结合上图，说明以下几点：</p>
+<ol>
+<li>从客户机中连接到“网关”IP的某个端口会连接到主机的该端口；</li>
+<li>可使用“-netdev user”命令来配置用户模式网络；</li>
+<li><p>如下命令会改变网络配置，使用192.168.76.0/24代替默认的10.0.2.0/24，且将guest DHCP从9开始分配（而不是15）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-netdev user,id=mynet0,net=192.168.76.0/24,dhcpstart=192.168.76.9</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可使用”restrict”选项将guest和host（以及更广泛的网络）隔离开，如下面的命令会将网络限制在guest和虚拟设备之间。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-netdev user,id=mynet0,restrict=y</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h5 id="2-1-3-用户模式网络高级配置"><a href="#2-1-3-用户模式网络高级配置" class="headerlink" title="2.1.3 用户模式网络高级配置"></a>2.1.3 用户模式网络高级配置</h5><p>额外用户模式网络选项：</p>
 <ul>
-<li>首先，将LLVM IR表示成一个有向无环图（SelectionDAG），图的节点是类<strong>SDNode</strong>的实例，包含了一条目标指令，每个<strong>SDNode</strong>有一个opcode，operands, type requirements，以及operation properties；</li>
-<li>接着，在DAG表示上，对指令进行操作。 <em>Instruction selection pass</em>被用于将non-native的DAG转换成native的目标特定指令。包括：<ul>
-<li>Combining;</li>
-<li>Legalizing，将DAG变换为使用本地支持的类型和操作;</li>
-<li>Scheduling;</li>
-<li>Register Allocation</li>
+<li><p>设置guest的DHCP地址以及hostname：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-netdev user,id=n0,host=addr,hostname=name</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指定guest-visible虚拟DNS服务器地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-netdev user,id=n0,dns=addr</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可模拟一个TFTP服务器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-netdev user,id=n0,tftp=xxx,bootfile=yyy</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用smb共在guest和host之间共享文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-netdev user,id=n0,smb=dir,smbserver=addr</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从host端口转发至guest：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-netdev user,id=n0,hostfwd=hostip:hostport-guestip:guestport</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>更多配置请参考该<a href="https://qemu.weilnetz.de/doc/qemu-doc.html#Network-options" target="_blank" rel="noopener">文档</a>。</p>
+<h4 id="2-2-TAP模式"><a href="#2-2-TAP模式" class="headerlink" title="2.2 TAP模式"></a>2.2 TAP模式</h4><h5 id="2-2-1-基本概念和特点"><a href="#2-2-1-基本概念和特点" class="headerlink" title="2.2.1 基本概念和特点"></a>2.2.1 基本概念和特点</h5><p>介绍该模式之前先介绍一下TUN/TAP的概念。<br>TUN（即network TUNnel），模拟了一套网络层设备，用于处理三层数据包，如IP数据包。<br>TAP（即network tap），模拟了一套数据链路层设备，用于处理第二层数据包，如Ethernet数据帧。<br>TUN用于路由，TAP用于创建网桥。<br>操作系统经由TUN/TAP发出的数据包被发送到一个用户空间程序,该程序和设备连接。该程序也可将数据包发送到另一个TUN/TAP设备，此时该TUN/TAP设备将数据包发送往操作系统网络协议栈，来模拟从外部接收数据包过程。</p>
+<p>Qemu的TAP网络后端正是使用了 <strong>主机中</strong> 的一个tun或tap网络设备，利用该接口将数据传输到guest OS。使用该方法需要使用ifconfig命令对guest OS的接口进行配置。<br>在TUN/TAP网络模式中，host系统负责在Qemu启动前对接口进行配置。<br>其优点是：</p>
+<ul>
+<li>1.性能很好；</li>
+<li>2.能够被配置来虚拟创建任何类型的网络拓扑。</li>
+</ul>
+<p>其缺点是：</p>
+<ul>
+<li>1.需要对主机中的网络拓扑进行配置，而主机中的网络拓扑取决于你使用的操作系统；</li>
+<li>2.需要root权限。</li>
+</ul>
+<h5 id="2-2-2-工作原理"><a href="#2-2-2-工作原理" class="headerlink" title="2.2.2 工作原理"></a>2.2.2 工作原理</h5><p>首先，需要在host系统中创建一个虚拟网桥，接着，将所有的虚拟机连接到该网桥上，且在同一个vlan中（默认vlan 0）。如下图：<br><img src="/images/qemu-tap.png" alt=""></p>
+<p>整个过程依赖于host kernel的TUN/TAP设备驱动。该驱动允许用户空间程序获取一个连接到网络设备的文件描述符，任何经由该文件描述符发往kernel的数据帧会被设备接收，而任何通过该设备传输的数据会被该程序接收。</p>
+<p>若给该TAP设备指定一个IP地址，guest中的应用程序将能够连接到Host中监听该IP地址的应用程序。<br>若启用host中的端口转发，guest发出的数据包能够被host kernel转发到互联网。</p>
+<p>本质上说，TAP设备就像一个和guest连接到同一个物理网络的网络设备。</p>
+<h5 id="2-2-3-配置方法"><a href="#2-2-3-配置方法" class="headerlink" title="2.2.3 配置方法"></a>2.2.3 配置方法</h5><p>具体的配置包括两部分：host设置，以及guest设置。这里仅仅简述主要步骤，不列举详细操作。细节可参考该<a href="http://bsdwiki.reedmedia.net/wiki/networking_qemu_virtual_bsd_systems.html" target="_blank" rel="noopener">文档</a>。</p>
+<ul>
+<li>host配置：<ul>
+<li>解决内核支持的问题</li>
+<li>创建网桥</li>
+<li>获取TAP设备，打开/dev/net/tun，调用TUNSETIFF ioctl()。需要root权限。</li>
+<li>将tap设备添加到网桥</li>
 </ul>
 </li>
-<li>最后，生成目标汇编指令。</li>
+<li>Guest配置<ul>
+<li>配置网卡连接模式，允许TUN/TAP接口</li>
 </ul>
-<p>SelectionDAG: 选择有向无环图。指令选择（也成为代码选择，或代码生成），是编译器代码生成器后端所涉及的重要问题之一。另外两个重要问题是指令调度与寄存器分配。指令选择器负责通过尽可能的用好可用的机器指令，将程序从目标机器无关的表示翻译到目标机器特定的形式。</p>
-<blockquote>
-<p>LLVM uses a SelectionDAG to represent LLVM IR instructions, and nodes of the SelectionDAG ideally represent native target instructions. During code generation, instruction selection passes are performed to convert non-native DAG instructions into native target-specific instructions. The pass described in XXXISelDAGToDAG.cpp is used to match patterns and perform DAG-to-DAG instruction selection. Optionally, a pass may be defined (in XXXBranchSelector.cpp) to perform similar DAG-to-DAG operations for branch instructions. Later, the code in XXXISelLowering.cpp replaces or removes operations and data types not supported natively (legalizes) in a SelectionDAG.</p>
-</blockquote>
-<p>LLVM同样提供了如何编写一个LLVM后端的<a href="https://llvm.org/docs/WritingAnLLVMBackend.html" target="_blank" rel="noopener">参考文档</a>。<br>这里仅列出基本的步骤，用于对整个过程有一个大概的了解，如下：</p>
+</li>
+</ul>
+<p>具体的操作网上有很多可以借鉴的材料，这里不列。</p>
+<h4 id="2-3-VDE网络后端"><a href="#2-3-VDE网络后端" class="headerlink" title="2.3 VDE网络后端"></a>2.3 VDE网络后端</h4><p>VDE网络后端使用了Virtual Distributed Ethernet架构，一般很少用。这里略过不谈。</p>
+<h4 id="2-4-Socket网络后端"><a href="#2-4-Socket网络后端" class="headerlink" title="2.4 Socket网络后端"></a>2.4 Socket网络后端</h4><p>Socket网络后端使得用户可以创建虚拟机之间相互可见的网络。主要用于扩展使用SLiRP后端创建的多个虚拟机的网络。如果用户希望多个虚拟机之间进行通信，tap网络后端相比而言是一个更好的选择，除非用户没有宿主机的host权限。<br>创建方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-netdev socket,id=mynet0,listen=:1234</span><br><span class="line">-netdev socket,id=mynet0,connect=:1234</span><br></pre></td></tr></table></figure></p>
+<h2 id="三、虚拟网络设备"><a href="#三、虚拟网络设备" class="headerlink" title="三、虚拟网络设备"></a>三、虚拟网络设备</h2><h3 id="1-如何创建虚拟网络设备"><a href="#1-如何创建虚拟网络设备" class="headerlink" title="1.如何创建虚拟网络设备"></a>1.如何创建虚拟网络设备</h3><p>用户根据自己的需求和guest环境来选择所需的虚拟网络设备。</p>
+<p>对于有PCI总线的机器来说，用户有更多的选择。e1000是qemu默认的虚拟网络适配器，rtl8139是qemu-kvm默认的网络适配器。在qemu和qemu-kvm中，virtio-net网络适配器性能最佳，但需要特殊的guest驱动支持。<br>使用”-device”选项将虚拟网络设备添加到虚拟机上。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-device TYPE,netdev=NAME</span><br></pre></td></tr></table></figure></p>
+<p>这里的NAME正是前面-netdev定义的后端名称，如此将该设备和网络后端关联起来。</p>
+<h3 id="2-配置选项"><a href="#2-配置选项" class="headerlink" title="2.配置选项"></a>2.配置选项</h3><p>一些其他的设备选项可以用于选择其他的设备，以及对设备的某些特性进行配置。如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-device DEVNAME,netdev=NET-ID,mac=MACADDR,DEV-OPTS</span><br></pre></td></tr></table></figure></p>
 <ul>
-<li>创建类<strong>TargetMachine</strong>的子类，用于描述目标机器的特征；</li>
-<li>定义目标寄存器集合。使用TableGen，根据目标特定的RegisterInfo.td文件生成寄存器定义、寄存器依赖、寄存器类型的代码。编写<strong>TargetRegisterInfo</strong>的子类；</li>
-<li>定义LLVM IR从指令的DAG表示到本地目标指令的选择和变换；</li>
-<li>编写一个将LLVM IR转换成目标机器GAS (GNU Assembler)格式的assembly printer（用于生成汇编指令输出文件）；</li>
-<li>可选地，为子目标（如，具有不同能力的版本）增加支持；</li>
-<li>可选地，增加JIT支持，创建一个机器代码emitter (TargetJITInfo的子类)，用于直接在内存中生成二进制代码。</li>
+<li>DEVNAME是具体的设备，如i82559c代表intel i82559C Ethernet device；</li>
+<li>NET-ID是网络后端标号；</li>
+<li>MACADDR是设备的MAC地址；</li>
+<li>DEV-OPTS是其他的一些选项</li>
 </ul>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文比较highlevel的对LLVM框架进行了一个简单分析，许多重要概念还需结合官方文档来深入理解，这里不再详细呈现。与常规的编译器相比，LLVM提供了更具通用性和扩展性的编译器框架，同时，丰富的库和工具为程序分析提供了丰富而强大的功能。万变不离其宗。要理解LLVM，还是要从编译器的工作原理出发，在结合LLVM具体的实现来尝试理解。</p>
-<p>纸上得来终觉浅，后面有时间再整理一下LLVM实践相关的内容。</p>
+<p>可在命令行中使用命令“qemu -device \?”来列出所有支持的设备。</p>
+<h2 id="四、-其他"><a href="#四、-其他" class="headerlink" title="四、 其他"></a>四、 其他</h2><ul>
+<li>nic 选项<br>如果你不在乎NIC的细节配置，你可以使用“-nic”参数来快速创建一个后端。</li>
+<li>遗留的net选项<br>Qemu 最初使用”-net nic“选项而不是”-device DEVNAME“， 使用”-net TYPE“而非”-netdev“ 类型。在Qemu0.12版本后该用法被遗弃，然而当前仍然可以这么用。例如，创建一个虚拟网络设备的用法如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-net nic,modle=MODEL</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>你可以使用“-net nic,model=\?”(命令行需要转义)来获取支持的虚拟网络设备。这些设备名称也许和”-device ?”获取的名称不尽相同。</p>
+<h2 id="五、参考："><a href="#五、参考：" class="headerlink" title="五、参考："></a>五、参考：</h2><p>1.<a href="https://qemu.weilnetz.de/doc/qemu-doc.html" target="_blank" rel="noopener">QEMU version 3.0.0 User Documentation</a><br>2.<a href="https://en.wikipedia.org/wiki/TUN/TAP" target="_blank" rel="noopener">TUN/TAP</a><br>3.<a href="http://bsdwiki.reedmedia.net/wiki/networking_qemu_virtual_bsd_systems.html" target="_blank" rel="noopener">networking qemu virtual bsd systems</a><br>4.<a href="https://people.gnome.org/~markmc/qemu-networking.html" target="_blank" rel="noopener">QEMU Networking</a><br>5.<a href="https://en.wikibooks.org/wiki/QEMU/Networking" target="_blank" rel="noopener">QEMU/Networking</a></p>
 
       
     </div>
@@ -617,7 +559,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://franklea.github.io/2018/04/10/llvm-clang/" title="LLVM编译器框架浅析">http://franklea.github.io/2018/04/10/llvm-clang/</a>
+    <a href="http://franklea.github.io/2018/08/22/qemu-networking/" title="Qemu网络连接">http://franklea.github.io/2018/08/22/qemu-networking/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -632,9 +574,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/llvm/" rel="tag"><i class="fa fa-tag"></i> llvm</a>
-          
-            <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
+            <a href="/tags/qemu/" rel="tag"><i class="fa fa-tag"></i> qemu</a>
           
         </div>
       
@@ -647,15 +587,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/07/31/mountqcow2/" rel="next" title="Linux下挂载qcow2镜像文件">
+                <i class="fa fa-chevron-left"></i> Linux下挂载qcow2镜像文件
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/16/dns-dig/" rel="prev" title="DNS学习与实践（二）—— dig简介">
-                DNS学习与实践（二）—— dig简介 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -846,7 +786,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-什么是LLVM"><span class="nav-number">1.</span> <span class="nav-text">1, 什么是LLVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LLVM-编译系统"><span class="nav-number">2.</span> <span class="nav-text">2, LLVM 编译系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-三个主要的LLVM组件"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 三个主要的LLVM组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-前端"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 前端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-中端"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 中端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-后端"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 后端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、网络后端"><span class="nav-number">2.</span> <span class="nav-text">二、网络后端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-如何创建网络后端"><span class="nav-number">2.1.</span> <span class="nav-text">1.如何创建网络后端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-网络后端分类"><span class="nav-number">2.2.</span> <span class="nav-text">2.网络后端分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-用户模式"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1.用户模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-1-用户模式网络特点"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">2.1.1 用户模式网络特点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-2-用户模式网络原理"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">2.1.2 用户模式网络原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-3-用户模式网络高级配置"><span class="nav-number">2.2.1.3.</span> <span class="nav-text">2.1.3 用户模式网络高级配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-TAP模式"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 TAP模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-1-基本概念和特点"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">2.2.1 基本概念和特点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-2-工作原理"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">2.2.2 工作原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-3-配置方法"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">2.2.3 配置方法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-VDE网络后端"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 VDE网络后端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-Socket网络后端"><span class="nav-number">2.2.4.</span> <span class="nav-text">2.4 Socket网络后端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、虚拟网络设备"><span class="nav-number">3.</span> <span class="nav-text">三、虚拟网络设备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-如何创建虚拟网络设备"><span class="nav-number">3.1.</span> <span class="nav-text">1.如何创建虚拟网络设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-配置选项"><span class="nav-number">3.2.</span> <span class="nav-text">2.配置选项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、-其他"><span class="nav-number">4.</span> <span class="nav-text">四、 其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、参考："><span class="nav-number">5.</span> <span class="nav-text">五、参考：</span></a></li></ol></div>
             
 
           </div>
@@ -1041,9 +981,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://franklea.github.io/2018/04/10/llvm-clang/';
-          this.page.identifier = '2018/04/10/llvm-clang/';
-          this.page.title = 'LLVM编译器框架浅析';
+          this.page.url = 'http://franklea.github.io/2018/08/22/qemu-networking/';
+          this.page.identifier = '2018/08/22/qemu-networking/';
+          this.page.title = 'Qemu网络连接';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://franklea-github-io.disqus.com/embed.js';
