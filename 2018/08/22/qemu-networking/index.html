@@ -135,7 +135,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://franklea.github.io/images/qemu-slirp.png">
 <meta property="og:image" content="http://franklea.github.io/images/qemu-tap.png">
-<meta property="og:updated_time" content="2018-08-22T11:49:51.737Z">
+<meta property="og:updated_time" content="2018-08-22T11:56:28.192Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Qemu网络连接">
 <meta name="twitter:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种网络连接方式？3.该连接方式支持哪些网络设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己理解，二来也希望能对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
@@ -566,6 +566,12 @@
 </tr>
 </tbody>
 </table>
+<p>因此，通常来说：</p>
+<ol>
+<li>如果有root权限，tap和网桥模式是最灵活也是功能最强大的网络传输模式，但配置比较繁琐；</li>
+<li>若没有root权限，且需要和其他VM连接，socket传输是比较靠谱的选择；</li>
+<li>若没有root权限，且想将VM连接到Host，用户模式可行，但有一定的限制。</li>
+</ol>
 <h2 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h2><p>1.<a href="https://qemu.weilnetz.de/doc/qemu-doc.html" target="_blank" rel="noopener">QEMU version 3.0.0 User Documentation</a><br>2.<a href="https://en.wikipedia.org/wiki/TUN/TAP" target="_blank" rel="noopener">TUN/TAP</a><br>3.<a href="http://bsdwiki.reedmedia.net/wiki/networking_qemu_virtual_bsd_systems.html" target="_blank" rel="noopener">networking qemu virtual bsd systems</a><br>4.<a href="https://people.gnome.org/~markmc/qemu-networking.html" target="_blank" rel="noopener">QEMU Networking</a><br>5.<a href="https://en.wikibooks.org/wiki/QEMU/Networking" target="_blank" rel="noopener">QEMU/Networking</a><br>6.<a href="https://wiki.qemu.org/Documentation/Networking" target="_blank" rel="noopener">Documentation/Networking</a></p>
 
       
