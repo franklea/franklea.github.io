@@ -125,20 +125,20 @@
 
 
 
-<meta name="description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。  一、概述Qemu的">
+<meta name="description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
 <meta name="keywords" content="qemu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Qemu网络连接">
 <meta property="og:url" content="http://franklea.github.io/2018/08/22/qemu-networking/index.html">
 <meta property="og:site_name" content="Franklea&#39;s Base">
-<meta property="og:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。  一、概述Qemu的">
+<meta property="og:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://franklea.github.io/images/qemu-slirp.png">
 <meta property="og:image" content="http://franklea.github.io/images/qemu-tap.png">
-<meta property="og:updated_time" content="2018-08-22T06:37:02.345Z">
+<meta property="og:updated_time" content="2018-08-22T06:40:26.136Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Qemu网络连接">
-<meta name="twitter:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。  一、概述Qemu的">
+<meta name="twitter:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
 <meta name="twitter:image" content="http://franklea.github.io/images/qemu-slirp.png">
 
 
@@ -433,6 +433,7 @@
 <p>关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：<br>1.Qemu虚拟机如何通过网络与外界连接？<br>2.Qemu提供哪几种连接方式？<br>3.该连接方式支持哪些设备？ 如何配置？</p>
 <p>在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。</p>
 <hr>
+<a id="more"></a>
 <h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Qemu的网络配置由两部分组成：</p>
 <ul>
 <li>虚拟网络设备，如PCI网卡</li>
