@@ -125,20 +125,20 @@
 
 
 
-<meta name="description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
+<meta name="description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种网络连接方式？3.该连接方式支持哪些网络设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己理解，二来也希望能对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
 <meta name="keywords" content="qemu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Qemu网络连接">
 <meta property="og:url" content="http://franklea.github.io/2018/08/22/qemu-networking/index.html">
 <meta property="og:site_name" content="Franklea&#39;s Base">
-<meta property="og:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
+<meta property="og:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种网络连接方式？3.该连接方式支持哪些网络设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己理解，二来也希望能对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://franklea.github.io/images/qemu-slirp.png">
 <meta property="og:image" content="http://franklea.github.io/images/qemu-tap.png">
-<meta property="og:updated_time" content="2018-08-22T06:40:26.136Z">
+<meta property="og:updated_time" content="2018-08-22T06:43:55.158Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Qemu网络连接">
-<meta name="twitter:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种连接方式？3.该连接方式支持哪些设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
+<meta name="twitter:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种网络连接方式？3.该连接方式支持哪些网络设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己理解，二来也希望能对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
 <meta name="twitter:image" content="http://franklea.github.io/images/qemu-slirp.png">
 
 
@@ -430,11 +430,11 @@
 
       
         <hr>
-<p>关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：<br>1.Qemu虚拟机如何通过网络与外界连接？<br>2.Qemu提供哪几种连接方式？<br>3.该连接方式支持哪些设备？ 如何配置？</p>
-<p>在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己整理和理解，二来也希望对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。</p>
+<p>关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：<br>1.Qemu虚拟机如何通过网络与外界连接？<br>2.Qemu提供哪几种网络连接方式？<br>3.该连接方式支持哪些网络设备？ 如何配置？</p>
+<p>在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己理解，二来也希望能对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。</p>
 <hr>
 <a id="more"></a>
-<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Qemu的网络配置由两部分组成：</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Qemu的网络配置由两部分组成：</p>
 <ul>
 <li>虚拟网络设备，如PCI网卡</li>
 <li>网络后端，用于和网络设备交互，如将数据包发往宿主机网络</li>
@@ -445,7 +445,7 @@
 <li>1.如果使用命令参数（-net, -netdev）指定任何网络选项，务必提供充分的选项信息，以确定设备和后端的连接。忘记指定后端或这网络设备将产生一条警告信息，如，此时VM能正常boot但没有网络功能。</li>
 <li>2.如果使用默认的SLiRP用户网络，ping(ICMP)功能不工作，但TCP和UDP正常工作。此时，不要使用ping来检查Qemu虚拟机的网络配置！</li>
 </ul>
-<h2 id="二、网络后端"><a href="#二、网络后端" class="headerlink" title="二、网络后端"></a>二、网络后端</h2><h3 id="1-如何创建网络后端"><a href="#1-如何创建网络后端" class="headerlink" title="1.如何创建网络后端"></a>1.如何创建网络后端</h3><p>根据宿主机环境，Qemu提供了多个候选网络后端。创建一个网络后端的命令为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-netdev TYPE,id=NAME,...</span><br></pre></td></tr></table></figure></p>
+<h2 id="网络后端"><a href="#网络后端" class="headerlink" title="网络后端"></a>网络后端</h2><h3 id="1-如何创建网络后端"><a href="#1-如何创建网络后端" class="headerlink" title="1.如何创建网络后端"></a>1.如何创建网络后端</h3><p>根据宿主机环境，Qemu提供了多个候选网络后端。创建一个网络后端的命令为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-netdev TYPE,id=NAME,...</span><br></pre></td></tr></table></figure></p>
 <p>id选项有两个作用：1.用于区分不同的网络后端，即使只有一个网络后端也必须使用；2.给定的NAME用于将虚拟网络设备和玩过后端关联起来.</p>
 <h3 id="2-网络后端分类"><a href="#2-网络后端分类" class="headerlink" title="2.网络后端分类"></a>2.网络后端分类</h3><p>通常，若客户机仅仅需要基础的上网功能，如访问一下网页，那么用户模式（slirp）是一个不错的选择。若还有额外的需求，如需要运行某类网络服务或者需要网络以其他方式运行，那么tap通常是最好的选择。<br>换言之，如果你想要简单，那么使用用户模式以及DHCP上网，如果想要严格的控制IP地址和路由，那么使用TUN/TAP网络接口。</p>
 <h4 id="2-1-用户模式"><a href="#2-1-用户模式" class="headerlink" title="2.1.用户模式"></a>2.1.用户模式</h4><h5 id="2-1-1-用户模式网络特点"><a href="#2-1-1-用户模式网络特点" class="headerlink" title="2.1.1 用户模式网络特点"></a>2.1.1 用户模式网络特点</h5><p>用户模式是Qemu默认的网络后端，使用简单，无需root/Administrator权限，但有如下限制：</p>
@@ -522,7 +522,7 @@
 <p>具体的操作网上有很多可以借鉴的材料，这里不列。</p>
 <h4 id="2-3-VDE网络后端"><a href="#2-3-VDE网络后端" class="headerlink" title="2.3 VDE网络后端"></a>2.3 VDE网络后端</h4><p>VDE网络后端使用了Virtual Distributed Ethernet架构，一般很少用。这里略过不谈。</p>
 <h4 id="2-4-Socket网络后端"><a href="#2-4-Socket网络后端" class="headerlink" title="2.4 Socket网络后端"></a>2.4 Socket网络后端</h4><p>Socket网络后端使得用户可以创建虚拟机之间相互可见的网络。主要用于扩展使用SLiRP后端创建的多个虚拟机的网络。如果用户希望多个虚拟机之间进行通信，tap网络后端相比而言是一个更好的选择，除非用户没有宿主机的host权限。<br>创建方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-netdev socket,id=mynet0,listen=:1234</span><br><span class="line">-netdev socket,id=mynet0,connect=:1234</span><br></pre></td></tr></table></figure></p>
-<h2 id="三、虚拟网络设备"><a href="#三、虚拟网络设备" class="headerlink" title="三、虚拟网络设备"></a>三、虚拟网络设备</h2><h3 id="1-如何创建虚拟网络设备"><a href="#1-如何创建虚拟网络设备" class="headerlink" title="1.如何创建虚拟网络设备"></a>1.如何创建虚拟网络设备</h3><p>用户根据自己的需求和guest环境来选择所需的虚拟网络设备。</p>
+<h2 id="虚拟网络设备"><a href="#虚拟网络设备" class="headerlink" title="虚拟网络设备"></a>虚拟网络设备</h2><h3 id="1-如何创建虚拟网络设备"><a href="#1-如何创建虚拟网络设备" class="headerlink" title="1.如何创建虚拟网络设备"></a>1.如何创建虚拟网络设备</h3><p>用户根据自己的需求和guest环境来选择所需的虚拟网络设备。</p>
 <p>对于有PCI总线的机器来说，用户有更多的选择。e1000是qemu默认的虚拟网络适配器，rtl8139是qemu-kvm默认的网络适配器。在qemu和qemu-kvm中，virtio-net网络适配器性能最佳，但需要特殊的guest驱动支持。<br>使用”-device”选项将虚拟网络设备添加到虚拟机上。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-device TYPE,netdev=NAME</span><br></pre></td></tr></table></figure></p>
 <p>这里的NAME正是前面-netdev定义的后端名称，如此将该设备和网络后端关联起来。</p>
 <h3 id="2-配置选项"><a href="#2-配置选项" class="headerlink" title="2.配置选项"></a>2.配置选项</h3><p>一些其他的设备选项可以用于选择其他的设备，以及对设备的某些特性进行配置。如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-device DEVNAME,netdev=NET-ID,mac=MACADDR,DEV-OPTS</span><br></pre></td></tr></table></figure></p>
@@ -533,13 +533,13 @@
 <li>DEV-OPTS是其他的一些选项</li>
 </ul>
 <p>可在命令行中使用命令“qemu -device \?”来列出所有支持的设备。</p>
-<h2 id="四、-其他"><a href="#四、-其他" class="headerlink" title="四、 其他"></a>四、 其他</h2><ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
 <li>nic 选项<br>如果你不在乎NIC的细节配置，你可以使用“-nic”参数来快速创建一个后端。</li>
 <li>遗留的net选项<br>Qemu 最初使用”-net nic“选项而不是”-device DEVNAME“， 使用”-net TYPE“而非”-netdev“ 类型。在Qemu0.12版本后该用法被遗弃，然而当前仍然可以这么用。例如，创建一个虚拟网络设备的用法如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-net nic,modle=MODEL</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>你可以使用“-net nic,model=\?”(命令行需要转义)来获取支持的虚拟网络设备。这些设备名称也许和”-device ?”获取的名称不尽相同。</p>
-<h2 id="五、参考："><a href="#五、参考：" class="headerlink" title="五、参考："></a>五、参考：</h2><p>1.<a href="https://qemu.weilnetz.de/doc/qemu-doc.html" target="_blank" rel="noopener">QEMU version 3.0.0 User Documentation</a><br>2.<a href="https://en.wikipedia.org/wiki/TUN/TAP" target="_blank" rel="noopener">TUN/TAP</a><br>3.<a href="http://bsdwiki.reedmedia.net/wiki/networking_qemu_virtual_bsd_systems.html" target="_blank" rel="noopener">networking qemu virtual bsd systems</a><br>4.<a href="https://people.gnome.org/~markmc/qemu-networking.html" target="_blank" rel="noopener">QEMU Networking</a><br>5.<a href="https://en.wikibooks.org/wiki/QEMU/Networking" target="_blank" rel="noopener">QEMU/Networking</a></p>
+<h2 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h2><p>1.<a href="https://qemu.weilnetz.de/doc/qemu-doc.html" target="_blank" rel="noopener">QEMU version 3.0.0 User Documentation</a><br>2.<a href="https://en.wikipedia.org/wiki/TUN/TAP" target="_blank" rel="noopener">TUN/TAP</a><br>3.<a href="http://bsdwiki.reedmedia.net/wiki/networking_qemu_virtual_bsd_systems.html" target="_blank" rel="noopener">networking qemu virtual bsd systems</a><br>4.<a href="https://people.gnome.org/~markmc/qemu-networking.html" target="_blank" rel="noopener">QEMU Networking</a><br>5.<a href="https://en.wikibooks.org/wiki/QEMU/Networking" target="_blank" rel="noopener">QEMU/Networking</a></p>
 
       
     </div>
@@ -787,7 +787,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、网络后端"><span class="nav-number">2.</span> <span class="nav-text">二、网络后端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-如何创建网络后端"><span class="nav-number">2.1.</span> <span class="nav-text">1.如何创建网络后端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-网络后端分类"><span class="nav-number">2.2.</span> <span class="nav-text">2.网络后端分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-用户模式"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1.用户模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-1-用户模式网络特点"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">2.1.1 用户模式网络特点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-2-用户模式网络原理"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">2.1.2 用户模式网络原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-3-用户模式网络高级配置"><span class="nav-number">2.2.1.3.</span> <span class="nav-text">2.1.3 用户模式网络高级配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-TAP模式"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 TAP模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-1-基本概念和特点"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">2.2.1 基本概念和特点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-2-工作原理"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">2.2.2 工作原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-3-配置方法"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">2.2.3 配置方法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-VDE网络后端"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 VDE网络后端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-Socket网络后端"><span class="nav-number">2.2.4.</span> <span class="nav-text">2.4 Socket网络后端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、虚拟网络设备"><span class="nav-number">3.</span> <span class="nav-text">三、虚拟网络设备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-如何创建虚拟网络设备"><span class="nav-number">3.1.</span> <span class="nav-text">1.如何创建虚拟网络设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-配置选项"><span class="nav-number">3.2.</span> <span class="nav-text">2.配置选项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、-其他"><span class="nav-number">4.</span> <span class="nav-text">四、 其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、参考："><span class="nav-number">5.</span> <span class="nav-text">五、参考：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络后端"><span class="nav-number">2.</span> <span class="nav-text">网络后端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-如何创建网络后端"><span class="nav-number">2.1.</span> <span class="nav-text">1.如何创建网络后端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-网络后端分类"><span class="nav-number">2.2.</span> <span class="nav-text">2.网络后端分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-用户模式"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1.用户模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-1-用户模式网络特点"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">2.1.1 用户模式网络特点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-2-用户模式网络原理"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">2.1.2 用户模式网络原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-3-用户模式网络高级配置"><span class="nav-number">2.2.1.3.</span> <span class="nav-text">2.1.3 用户模式网络高级配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-TAP模式"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 TAP模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-1-基本概念和特点"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">2.2.1 基本概念和特点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-2-工作原理"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">2.2.2 工作原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-3-配置方法"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">2.2.3 配置方法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-VDE网络后端"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 VDE网络后端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-Socket网络后端"><span class="nav-number">2.2.4.</span> <span class="nav-text">2.4 Socket网络后端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟网络设备"><span class="nav-number">3.</span> <span class="nav-text">虚拟网络设备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-如何创建虚拟网络设备"><span class="nav-number">3.1.</span> <span class="nav-text">1.如何创建虚拟网络设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-配置选项"><span class="nav-number">3.2.</span> <span class="nav-text">2.配置选项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献："><span class="nav-number">5.</span> <span class="nav-text">参考文献：</span></a></li></ol></div>
             
 
           </div>
