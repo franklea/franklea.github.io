@@ -135,7 +135,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://franklea.github.io/images/qemu-slirp.png">
 <meta property="og:image" content="http://franklea.github.io/images/qemu-tap.png">
-<meta property="og:updated_time" content="2018-08-22T06:43:55.158Z">
+<meta property="og:updated_time" content="2018-08-22T06:59:45.553Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Qemu网络连接">
 <meta name="twitter:description" content="关于Qemu虚拟机的联网一直比较令人疑惑，刚开始接触时不免会产生以下几个问题：1.Qemu虚拟机如何通过网络与外界连接？2.Qemu提供哪几种网络连接方式？3.该连接方式支持哪些网络设备？ 如何配置？ 在查阅了一些qemu网络模拟相关的资料后，我将其中的内容进行了整理，最终形成这篇文章。一来帮助自己理解，二来也希望能对有同样疑惑的同学有所帮助。若发现理解有误之处，还请帮忙提出。">
@@ -458,7 +458,7 @@
 <li><p>客户机无法直接被宿主机或外部网络访问。</p>
 </li>
 </ul>
-<h5 id="2-1-2-用户模式网络原理"><a href="#2-1-2-用户模式网络原理" class="headerlink" title="2.1.2 用户模式网络原理"></a>2.1.2 用户模式网络原理</h5><p>用户模式网络基于slirp实现，slirp在Qemu内实现了一套完整的TCP/IP协议栈，基于该协议栈实现了一个虚拟的NAT’d网络。一个典型（默认）的用户网络如下图。</p>
+<h5 id="2-1-2-用户模式网络原理"><a href="#2-1-2-用户模式网络原理" class="headerlink" title="2.1.2 用户模式网络原理"></a>2.1.2 用户模式网络原理</h5><p>用户模式网络基于slirp实现，slirp在Qemu内实现了一套完整的TCP/IP协议栈，基于该协议栈实现了一个虚拟的NAT’d网络。一个典型（默认）的用户网络如下图[6]。</p>
 <p><img src="/images/qemu-slirp.png" alt=""></p>
 <p>结合上图，说明以下几点：</p>
 <ol>
@@ -501,7 +501,7 @@
 <li>1.需要对主机中的网络拓扑进行配置，而主机中的网络拓扑取决于你使用的操作系统；</li>
 <li>2.需要root权限。</li>
 </ul>
-<h5 id="2-2-2-工作原理"><a href="#2-2-2-工作原理" class="headerlink" title="2.2.2 工作原理"></a>2.2.2 工作原理</h5><p>首先，需要在host系统中创建一个虚拟网桥，接着，将所有的虚拟机连接到该网桥上，且在同一个vlan中（默认vlan 0）。如下图：<br><img src="/images/qemu-tap.png" alt=""></p>
+<h5 id="2-2-2-工作原理"><a href="#2-2-2-工作原理" class="headerlink" title="2.2.2 工作原理"></a>2.2.2 工作原理</h5><p>首先，需要在host系统中创建一个虚拟网桥，接着，将所有的虚拟机连接到该网桥上，且在同一个vlan中（默认vlan 0）。如下图[3]：<br><img src="/images/qemu-tap.png" alt=""></p>
 <p>整个过程依赖于host kernel的TUN/TAP设备驱动。该驱动允许用户空间程序获取一个连接到网络设备的文件描述符，任何经由该文件描述符发往kernel的数据帧会被设备接收，而任何通过该设备传输的数据会被该程序接收。</p>
 <p>若给该TAP设备指定一个IP地址，guest中的应用程序将能够连接到Host中监听该IP地址的应用程序。<br>若启用host中的端口转发，guest发出的数据包能够被host kernel转发到互联网。</p>
 <p>本质上说，TAP设备就像一个和guest连接到同一个物理网络的网络设备。</p>
@@ -539,7 +539,7 @@
 </li>
 </ul>
 <p>你可以使用“-net nic,model=\?”(命令行需要转义)来获取支持的虚拟网络设备。这些设备名称也许和”-device ?”获取的名称不尽相同。</p>
-<h2 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h2><p>1.<a href="https://qemu.weilnetz.de/doc/qemu-doc.html" target="_blank" rel="noopener">QEMU version 3.0.0 User Documentation</a><br>2.<a href="https://en.wikipedia.org/wiki/TUN/TAP" target="_blank" rel="noopener">TUN/TAP</a><br>3.<a href="http://bsdwiki.reedmedia.net/wiki/networking_qemu_virtual_bsd_systems.html" target="_blank" rel="noopener">networking qemu virtual bsd systems</a><br>4.<a href="https://people.gnome.org/~markmc/qemu-networking.html" target="_blank" rel="noopener">QEMU Networking</a><br>5.<a href="https://en.wikibooks.org/wiki/QEMU/Networking" target="_blank" rel="noopener">QEMU/Networking</a></p>
+<h2 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h2><p>1.<a href="https://qemu.weilnetz.de/doc/qemu-doc.html" target="_blank" rel="noopener">QEMU version 3.0.0 User Documentation</a><br>2.<a href="https://en.wikipedia.org/wiki/TUN/TAP" target="_blank" rel="noopener">TUN/TAP</a><br>3.<a href="http://bsdwiki.reedmedia.net/wiki/networking_qemu_virtual_bsd_systems.html" target="_blank" rel="noopener">networking qemu virtual bsd systems</a><br>4.<a href="https://people.gnome.org/~markmc/qemu-networking.html" target="_blank" rel="noopener">QEMU Networking</a><br>5.<a href="https://en.wikibooks.org/wiki/QEMU/Networking" target="_blank" rel="noopener">QEMU/Networking</a><br>6.<a href="https://wiki.qemu.org/Documentation/Networking" target="_blank" rel="noopener">Documentation/Networking</a></p>
 
       
     </div>
